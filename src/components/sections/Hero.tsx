@@ -1,13 +1,28 @@
 "use client";
 
 import React from "react";
+import dynamic from "next/dynamic";
 import { profile } from "@/data/profile";
-import { TextScramble } from "@/components/animations/TextScramble";
 import { RotatingWords } from "@/components/animations/RotatingWords";
-import { Button } from "@/components/ui/Button";
 import { useSmoothScroll } from "@/components/providers/SmoothScrollProvider";
-import { ChevronDown, Sparkles } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ChevronDown, Mail, Sparkles } from "lucide-react";
 import { SiGithub } from "react-icons/si";
+
+// Dynamically import 3D Lanyard Card with SSR disabled
+const LanyardCard3D = dynamic(
+  () => import("@/components/three/LanyardCard3D").then((mod) => mod.LanyardCard3D),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full h-[520px] md:h-[620px] lg:h-[700px] flex flex-col items-center justify-center gap-3">
+        <div className="w-12 h-12 rounded-full border-2 border-royal/30 border-t-sky animate-spin" />
+        <span className="text-xs text-mist/60 font-mono tracking-widest uppercase">
+          Memuat 3D Badge...
+        </span>
+      </div>
+    ),
+  }
+);
 
 export function Hero() {
   const { scrollTo } = useSmoothScroll();
@@ -15,83 +30,116 @@ export function Hero() {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex flex-col justify-between pt-32 pb-12 px-6 md:px-12 max-w-7xl mx-auto overflow-hidden"
+      className="relative min-h-screen flex flex-col justify-between pt-28 md:pt-32 pb-12 px-6 md:px-12 max-w-7xl mx-auto overflow-hidden"
     >
-      <div className="flex-1 flex flex-col justify-center max-w-3xl z-10 my-auto">
-        {/* Status Pill */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-navy/40 border border-deep/70 backdrop-blur-md mb-6 w-fit shadow-sm">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-royal" />
-          </span>
-          <span className="text-xs font-medium text-mist flex items-center gap-1.5">
-            <Sparkles className="w-3 h-3 text-sky" />
-            {profile.school}
-          </span>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-center flex-1 my-auto">
+        {/* Left Column: Typography & Bio */}
+        <div className="lg:col-span-7 flex flex-col justify-center z-10 py-4 order-2 lg:order-1">
+          {/* Status Pill */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-navy/50 border border-deep/80 backdrop-blur-md mb-6 w-fit shadow-sm">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-royal" />
+            </span>
+            <span className="text-xs font-medium text-mist flex items-center gap-1.5">
+              <Sparkles className="w-3 h-3 text-sky" />
+              {profile.school}
+            </span>
+          </div>
+
+          {/* Main Title matching Image 1 & Font Syne */}
+          <h1 className="font-heading text-4xl sm:text-6xl md:text-7xl lg:text-[5.2rem] font-extrabold tracking-tight text-snow leading-[1.04] select-none">
+            <span className="block text-mist/90 text-2xl sm:text-3xl md:text-4xl font-semibold mb-1">
+              Welcome to
+            </span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-snow via-sky to-royal drop-shadow-[0_0_35px_rgba(37,99,235,0.45)]">
+              My Portfolio
+            </span>
+          </h1>
+
+          {/* Dynamic Rotating Roles with Blinking Cursor */}
+          <div className="text-lg sm:text-2xl font-semibold mt-4 text-sky flex items-center flex-wrap gap-2">
+            <RotatingWords
+              words={[
+                "3D Creative Developer",
+                "Full Stack Web Developer",
+                "Computing Enthusiast",
+                "SMPN 9 Probolinggo Student",
+              ]}
+              className="text-sky font-semibold tracking-wide"
+            />
+            <span className="w-0.5 h-5 bg-sky animate-pulse inline-block" />
+          </div>
+
+          {/* Bio Description matching user prompt and image tone */}
+          <p className="text-sm sm:text-base md:text-lg text-mist/90 max-w-xl mt-5 leading-relaxed">
+            Berawal dari rasa penasaran, sekarang jadi passion. Aku suka bereksperimen dengan kode,
+            mengeksplorasi teknologi baru, dan mengubah ide menjadi sesuatu yang nyata. Dari tampilan web
+            yang menarik sampai interaksi 3D yang seru, aku selalu berusaha bikin sesuatu yang bukan cuma
+            keren dilihat, tapi juga nyaman digunakan.
+          </p>
+
+          {/* Pill CTA Buttons */}
+          <div className="flex flex-wrap items-center gap-3.5 mt-8">
+            <a
+              href="#live-projects"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollTo("#live-projects", { offset: -40 });
+              }}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-royal to-sky hover:from-royal/90 hover:to-sky/90 text-snow font-semibold text-sm shadow-[0_0_25px_rgba(37,99,235,0.45)] hover:shadow-[0_0_35px_rgba(56,189,248,0.6)] hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer group"
+            >
+              <span>Lihat Project</span>
+              <ArrowRight className="w-4 h-4 text-snow group-hover:translate-x-1 transition-transform" />
+            </a>
+
+            <a
+              href="#contact"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollTo("#contact", { offset: -40 });
+              }}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-navy/60 hover:bg-navy/90 border border-deep/80 hover:border-royal/70 text-snow font-medium text-sm backdrop-blur-md hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer group"
+            >
+              <span>Hubungi Saya</span>
+              <ArrowUpRight className="w-4 h-4 text-mist group-hover:text-sky group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+            </a>
+          </div>
+
+          {/* FIND ME Social Links Row */}
+          <div className="flex items-center gap-4 mt-8 pt-6 border-t border-deep/40">
+            <span className="text-xs uppercase tracking-widest text-mist/70 font-bold">
+              FIND ME
+            </span>
+            <div className="flex items-center gap-2.5">
+              <a
+                href={profile.socials.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub Profile"
+                className="w-9 h-9 rounded-full bg-navy/60 border border-deep/80 hover:border-royal/80 hover:bg-royal/20 flex items-center justify-center text-mist hover:text-snow transition-all hover:scale-110 shadow-sm"
+              >
+                <SiGithub className="w-4 h-4" />
+              </a>
+              <a
+                href={`mailto:${profile.socials.email}`}
+                aria-label="Email Arkhanza"
+                className="w-9 h-9 rounded-full bg-navy/60 border border-deep/80 hover:border-royal/80 hover:bg-royal/20 flex items-center justify-center text-mist hover:text-snow transition-all hover:scale-110 shadow-sm"
+              >
+                <Mail className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
         </div>
 
-        {/* Name Title with TextScramble */}
-        <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-snow leading-[1.08] select-none">
-          <span className="block text-mist/60 text-lg sm:text-2xl font-light tracking-normal mb-2">
-            Halo, saya
-          </span>
-          <TextScramble text={profile.name} delay={400} />
-        </h1>
-
-        {/* Dynamic Rotating Roles */}
-        <div className="text-xl sm:text-2xl md:text-3xl font-semibold mt-4 text-sky flex flex-wrap items-baseline gap-2">
-          <span className="text-mist/70 font-normal">Seorang</span>
-          <RotatingWords
-            words={profile.role}
-            className="text-transparent bg-clip-text bg-gradient-to-r from-sky to-snow underline decoration-royal/60 decoration-2 underline-offset-8"
-          />
-        </div>
-
-        {/* Tagline */}
-        <p className="text-base sm:text-lg text-mist/90 max-w-xl mt-6 leading-relaxed">
-          {profile.tagline} Mengembangkan aplikasi web yang cepat, responsif, dan memberikan pengalaman digital yang memikat.
-        </p>
-
-        {/* CTA Buttons */}
-        <div className="flex flex-wrap items-center gap-4 mt-8">
-          <Button
-            size="lg"
-            variant="primary"
-            onClick={() => scrollTo("#live-projects", { offset: -40 })}
-          >
-            Lihat Project
-          </Button>
-
-          <Button
-            size="lg"
-            variant="secondary"
-            href={profile.socials.github}
-            external
-            icon={<SiGithub className="text-lg text-sky" />}
-          >
-            GitHub Profile
-          </Button>
-        </div>
-
-        {/* Quick Tech Highlights */}
-        <div className="flex flex-wrap items-center gap-2 mt-10 pt-6 border-t border-deep/40 text-xs text-mist/70">
-          <span className="text-mist font-semibold">Tech:</span>
-          <span>React</span>
-          <span>•</span>
-          <span>Next.js</span>
-          <span>•</span>
-          <span>Three.js</span>
-          <span>•</span>
-          <span>PostgreSQL</span>
-          <span>•</span>
-          <span>Supabase</span>
-          <span>•</span>
-          <span>Node.js</span>
+        {/* Right Column: 3D Swinging Lanyard Card */}
+        <div className="lg:col-span-5 relative flex items-center justify-center z-20 order-1 lg:order-2">
+          <LanyardCard3D />
         </div>
       </div>
 
       {/* Animated Scroll Down Indicator */}
-      <div className="z-10 flex flex-col items-center justify-center pt-8">
+      <div className="z-10 flex flex-col items-center justify-center pt-6">
         <button
           onClick={() => scrollTo("#about", { offset: -40 })}
           className="flex flex-col items-center gap-2 text-xs uppercase tracking-widest text-mist/60 hover:text-sky transition-colors cursor-pointer group"

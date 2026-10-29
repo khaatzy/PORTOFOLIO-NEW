@@ -1,20 +1,22 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-ink: #000000;
-  --color-night: #050A18;
-  --color-navy: #0A1A3F;
-  --color-deep: #10275E;
-  --color-royal: #1E5EFF;
-  --color-sky: #4DA3FF;
-  --color-mist: #A9B8D6;
-  --color-snow: #EAF0FF;
+  --color-ink: #020617;
+  --color-night: #050B1E;
+  --color-navy: #0A1638;
+  --color-deep: #112255;
+  --color-royal: #2563EB;
+  --color-sky: #38BDF8;
+  --color-mist: #94A3B8;
+  --color-snow: #F8FAFC;
+  --font-heading: var(--font-heading);
+  --font-body: var(--font-body);
 }
 
 :root {
-  --bg-primary: #000000;
-  --text-primary: #EAF0FF;
-  --text-secondary: #A9B8D6;
+  --bg-primary: #020617;
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
 }
 
 * {
@@ -22,23 +24,28 @@
 }
 
 html {
-  background-color: #000000;
-  color: #EAF0FF;
+  background-color: #020617;
+  color: #F8FAFC;
   color-scheme: dark;
 }
 
 body {
-  background-color: #000000;
-  color: #EAF0FF;
+  background-color: #020617;
+  color: #F8FAFC;
   min-height: 100vh;
   overflow-x: hidden;
-  selection-background-color: #1E5EFF;
-  selection-color: #EAF0FF;
+  selection-background-color: #2563EB;
+  selection-color: #F8FAFC;
+}
+
+h1, h2, h3, h4, .font-heading {
+  font-family: var(--font-heading), sans-serif;
+  letter-spacing: -0.025em;
 }
 
 ::selection {
-  background-color: #1E5EFF;
-  color: #EAF0FF;
+  background-color: #2563EB;
+  color: #F8FAFC;
 }
 
 /* Lenis recommended css */
@@ -68,16 +75,16 @@ html.lenis, html.lenis body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #050A18;
+  background: #020617;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #10275E;
+  background: #112255;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #1E5EFF;
+  background: #2563EB;
 }
 
 @keyframes pulse-glow {
@@ -112,4 +119,3 @@ html.lenis, html.lenis body {
     transform: translateX(0%);
   }
 }
-

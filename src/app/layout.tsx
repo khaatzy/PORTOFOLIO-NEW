@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Inter } from "next/font/google";
+import { Syne, Inter } from "next/font/google";
 import "./globals.css";
 import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { profile } from "@/data/profile";
 
-const spaceGrotesk = Space_Grotesk({
+const syne = Syne({
   subsets: ["latin"],
   variable: "--font-heading",
   display: "swap",
+  weight: ["500", "600", "700", "800"],
 });
 
 const inter = Inter({
@@ -60,7 +61,7 @@ export default function RootLayout({
   return (
     <html
       lang="id"
-      className={`${spaceGrotesk.variable} ${inter.variable} scroll-smooth antialiased selection:bg-royal selection:text-snow`}
+      className={`${syne.variable} ${inter.variable} scroll-smooth antialiased selection:bg-royal selection:text-snow`}
     >
       <body className="min-h-screen bg-ink text-snow font-sans overflow-x-hidden">
         <SmoothScrollProvider>
