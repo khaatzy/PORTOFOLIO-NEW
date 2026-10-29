@@ -50,6 +50,7 @@ export function Particles() {
   }, [count]);
 
   const scrollOffset = useRef(0);
+  const elapsedTimeRef = useRef(0);
 
   useEffect(() => {
     const trigger = ScrollTrigger.create({
@@ -66,11 +67,12 @@ export function Particles() {
     };
   }, []);
 
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     if (pointsRef.current) {
+      elapsedTimeRef.current += delta;
       // Slow rotation & floating
       pointsRef.current.rotation.y += delta * 0.03;
-      pointsRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.1) * 0.05;
+      pointsRef.current.rotation.x = Math.sin(elapsedTimeRef.current * 0.1) * 0.05;
 
       // React subtly to vertical scroll
       const targetY = scrollOffset.current * 3;

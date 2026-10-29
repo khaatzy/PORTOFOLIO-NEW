@@ -15,6 +15,7 @@ const BackgroundScene = dynamic(
             alt="Loading background"
             fill
             priority
+            sizes="100vw"
             className="object-cover object-top"
           />
         </div>

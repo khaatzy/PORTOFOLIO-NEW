@@ -16,15 +16,15 @@ const vertexShader = `
     vUv = uv;
     vec3 pos = position;
 
-    // Subtle wave distortion based on mouse and time
+    // Subtle wave distortion based on mouse
     float dist = distance(uv, uMouse * 0.5 + 0.5);
-    float wave = sin(uv.y * 8.0 + uTime * 1.2) * cos(uv.x * 8.0 + uTime) * 0.04;
-    float mouseWave = sin(dist * 10.0 - uTime * 2.0) * exp(-dist * 3.0) * 0.08;
+    float wave = sin(uv.y * 6.0 + uTime * 1.0) * cos(uv.x * 6.0 + uTime * 0.8) * 0.025;
+    float mouseWave = sin(dist * 8.0 - uTime * 2.0) * exp(-dist * 2.5) * 0.05;
 
     pos.z += (wave + mouseWave) * (1.0 - uProgress * 0.7);
 
     // Scale outward as user scrolls
-    pos.xy *= 1.0 + uProgress * 0.25;
+    pos.xy *= 1.0 + uProgress * 0.2;
 
     gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
   }
@@ -39,38 +39,21 @@ const fragmentShader = `
   void main() {
     vec4 tex = texture2D(uTexture, vUv);
 
-    // Convert to grayscale
+    // Keep natural face clarity and enhance with blue ambiance
     float gray = dot(tex.rgb, vec3(0.299, 0.587, 0.114));
 
-    // Duotone color grading (ink -> navy -> royal blue -> sky blue)
-    vec3 colDark = vec3(0.0, 0.0, 0.0);
-    vec3 colNavy = vec3(0.039, 0.102, 0.247); // #0A1A3F
-    vec3 colRoyal = vec3(0.118, 0.369, 1.0);   // #1E5EFF
-    vec3 colSky = vec3(0.302, 0.639, 1.0);     // #4DA3FF
+    // Atmospheric blue tint in darker areas (#10275E to #1E5EFF)
+    vec3 blueRim = vec3(0.118, 0.369, 1.0) * pow(gray, 1.5) * 0.35;
+    vec3 ambientBlue = vec3(0.04, 0.10, 0.25) * (1.0 - gray) * 0.4;
 
-    vec3 tone;
-    if (gray < 0.4) {
-      tone = mix(colDark, colNavy, gray / 0.4);
-    } else if (gray < 0.8) {
-      tone = mix(colNavy, colRoyal, (gray - 0.4) / 0.4);
-    } else {
-      tone = mix(colRoyal, colSky, (gray - 0.8) / 0.2);
-    }
+    vec3 finalColor = tex.rgb * 1.05 + blueRim + ambientBlue;
 
-    // Blend a bit of original detail for realism
-    vec3 finalColor = mix(tone, tex.rgb * vec3(0.4, 0.7, 1.2), 0.35);
-
-    // Soft vignette around edges
+    // Soft fade only on outer perimeter of the plane
     float distFromCenter = distance(vUv, vec2(0.5, 0.5));
-    float vignette = smoothstep(0.7, 0.2, distFromCenter);
+    float vignette = smoothstep(0.9, 0.55, distFromCenter);
 
-    // Fade on the bottom and left edges to blend into dark website text area
-    float edgeFadeX = smoothstep(0.0, 0.25, vUv.x);
-    float edgeFadeY = smoothstep(0.0, 0.3, vUv.y);
-    float edgeAlpha = edgeFadeX * edgeFadeY * vignette;
-
-    // Dissolve / fade on scroll
-    float alpha = (1.0 - uProgress * 0.75) * edgeAlpha;
+    // Dissolve / fade gently on scroll
+    float alpha = (1.0 - uProgress * 0.85) * vignette * 0.85;
 
     gl_FragColor = vec4(finalColor, alpha);
   }
@@ -84,7 +67,7 @@ export function PhotoPlane() {
   const texture = useTexture("/images/profile.jpg");
 
   const isDesktop = viewport.width > 6;
-  const planeWidth = isDesktop ? 3.4 : Math.min(viewport.width * 0.85, 3.2);
+  const planeWidth = isDesktop ? 3.6 : Math.min(viewport.width * 0.9, 3.4);
   const planeHeight = planeWidth * 1.35; // 3:4 portrait ratio
 
   const mouseTarget = useRef({ x: 0, y: 0 });
@@ -116,7 +99,6 @@ export function PhotoPlane() {
       scrub: 1,
       onUpdate: (self) => {
         if (materialRef.current) {
-          // Normalize progress so Hero fades out smoothly over the first 1.5 viewports
           const heroProgress = Math.min(1, self.scroll() / (window.innerHeight * 1.5));
           materialRef.current.uniforms.uProgress.value = heroProgress;
         }
@@ -129,7 +111,7 @@ export function PhotoPlane() {
     };
   }, []);
 
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     if (materialRef.current) {
       materialRef.current.uniforms.uTime.value += delta;
 
@@ -140,9 +122,9 @@ export function PhotoPlane() {
     }
   });
 
-  // Desktop: position slightly to the right so left side holds headline text
-  const posX = isDesktop ? Math.min(viewport.width * 0.22, 2.0) : 0;
-  const posY = isDesktop ? 0 : 0.2;
+  // Desktop: position to the right
+  const posX = isDesktop ? Math.min(viewport.width * 0.25, 2.2) : 0;
+  const posY = isDesktop ? 0 : 0.1;
 
   return (
     <mesh ref={meshRef} position={[posX, posY, -0.5]}>
