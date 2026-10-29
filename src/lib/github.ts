@@ -74,7 +74,7 @@ export async function getGithubRepos(): Promise<GitHubRepoItem[]> {
         displayName = "OASE Landing Page";
         description =
           "Landing page interaktif untuk platform curhat anonim Proyek OASE.";
-        homepage = "https://landing-oase2.vercel.app";
+        homepage = "https://proyek-oase-anvapro.vercel.app/dashboard-awal.html";
       } else if (r.name.toLowerCase() === "portofolio-new") {
         displayName = "Portofolio Website";
         description =
@@ -169,7 +169,7 @@ function getFallbackRepos(): GitHubRepoItem[] {
       description:
         "Landing page interaktif untuk platform curhat anonim Proyek OASE.",
       html_url: `https://github.com/${profile.githubUsername}/landing`,
-      homepage: "https://landing-oase2.vercel.app",
+      homepage: "https://proyek-oase-anvapro.vercel.app/dashboard-awal.html",
       stargazers_count: 0,
       forks_count: 0,
       language: "TypeScript",
