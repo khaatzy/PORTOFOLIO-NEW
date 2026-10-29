@@ -3,7 +3,8 @@
 import React from "react";
 import dynamic from "next/dynamic";
 import { profile } from "@/data/profile";
-import { RotatingWords } from "@/components/animations/RotatingWords";
+import { TextScramble } from "@/components/animations/TextScramble";
+import { ScrambleRotatingWords } from "@/components/animations/ScrambleRotatingWords";
 import { useSmoothScroll } from "@/components/providers/SmoothScrollProvider";
 import { ArrowRight, ArrowUpRight, ChevronDown, Mail, Sparkles } from "lucide-react";
 import { SiGithub } from "react-icons/si";
@@ -50,25 +51,31 @@ export function Hero() {
           {/* Main Title matching Image 1 & Font Syne */}
           <h1 className="font-heading text-4xl sm:text-6xl md:text-7xl lg:text-[5.2rem] font-extrabold tracking-tight text-snow leading-[1.04] select-none">
             <span className="block text-mist/90 text-2xl sm:text-3xl md:text-4xl font-semibold mb-1">
-              Welcome to
+              <TextScramble text="Welcome to" delay={250} speed={32} />
             </span>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-snow via-sky to-royal drop-shadow-[0_0_35px_rgba(37,99,235,0.45)]">
               My Portfolio
             </span>
           </h1>
 
-          {/* Dynamic Rotating Roles with Blinking Cursor */}
-          <div className="text-lg sm:text-2xl font-semibold mt-4 text-sky flex items-center flex-wrap gap-2">
-            <RotatingWords
+          {/* Dynamic Decrypting Roles + Separator Pipe + Permanent Name */}
+          <div className="text-base sm:text-xl md:text-2xl font-semibold mt-4 text-sky flex items-center flex-wrap gap-x-2.5 gap-y-1">
+            <ScrambleRotatingWords
               words={[
-                "3D Creative Developer",
-                "Full Stack Web Developer",
-                "Computing Enthusiast",
                 "SMPN 9 Probolinggo Student",
+                "Full Stack Web Developer",
+                "3D Creative Developer",
+                "Computing Enthusiast",
               ]}
               className="text-sky font-semibold tracking-wide"
             />
-            <span className="w-0.5 h-5 bg-sky animate-pulse inline-block" />
+            <span className="text-mist/50 font-light select-none text-base sm:text-xl">
+              |
+            </span>
+            <span className="text-snow font-bold tracking-tight text-base sm:text-xl">
+              {profile.name}
+            </span>
+            <span className="w-0.5 h-4 sm:h-5 bg-sky animate-pulse inline-block ml-0.5" />
           </div>
 
           {/* Bio Description matching user prompt and image tone */}
