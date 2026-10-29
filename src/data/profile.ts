@@ -24,7 +24,7 @@ export const profile = {
   },
   githubUsername: "khaatzy",
   // Repo unggulan — tampil PALING DEPAN dengan badge "⭐ Featured"
-  featuredRepos: ["APK-ABSEN"],
+  featuredRepos: ["APK-ABSEN", "oase-cerita"],
   liveProjects: [
     {
       title: "APK Absen — Absensi Digital QR",
@@ -42,7 +42,7 @@ export const profile = {
       description:
         "Platform curhat anonim berbasis digital untuk lingkungan sekolah. Siswa dapat bercerita dengan aman karena anonimitas pengguna terjamin sepenuhnya, menghadirkan ruang aman untuk didengar.",
       url: "https://proyek-oase-anvapro.vercel.app/",
-      repo: "",
+      repo: "https://github.com/khaatzy/oase-cerita",
       image: "/images/projects/proyek-oase.svg",
       tags: ["Anonymous", "Privacy", "School", "Web App"],
       featured: false,

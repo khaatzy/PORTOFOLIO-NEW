@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Syne, Inter } from "next/font/google";
 import "./globals.css";
 import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
-import { CustomCursor } from "@/components/ui/CustomCursor";
 import { profile } from "@/data/profile";
 
 const syne = Syne({
@@ -65,7 +64,6 @@ export default function RootLayout({
     >
       <body className="min-h-screen bg-ink text-snow font-sans overflow-x-hidden">
         <SmoothScrollProvider>
-          <CustomCursor />
           {children}
         </SmoothScrollProvider>
       </body>

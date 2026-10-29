@@ -44,11 +44,14 @@ export async function getGithubRepos(): Promise<GitHubRepoItem[]> {
       return getFallbackRepos();
     }
 
-    // Filter out forks
-    const ownRepos = (data as RawGithubRepo[]).filter((repo) => !repo.fork);
+    // Filter out forks and old "Porto" placeholder (replaced by OASE)
+    const ownRepos = (data as RawGithubRepo[]).filter(
+      (repo) => !repo.fork && repo.name.toLowerCase() !== "porto"
+    );
 
-    // Sort: featuredRepos first, then stars desc, then updated_at desc
-    const featuredNames = new Set(profile.featuredRepos.map((n) => n.toLowerCase()));
+    const featuredNames = new Set(
+      profile.featuredRepos.map((n) => n.toLowerCase())
+    );
 
     ownRepos.sort((a, b) => {
       const aFeatured = featuredNames.has(a.name.toLowerCase()) ? 1 : 0;
@@ -62,13 +65,30 @@ export async function getGithubRepos(): Promise<GitHubRepoItem[]> {
     });
 
     const mapped: GitHubRepoItem[] = ownRepos.slice(0, 6).map((r) => {
+      let displayName = r.name;
+      let description = r.description;
+      let homepage = r.homepage;
+
+      // Fix "landing" to clear title and proper homepage
+      if (r.name.toLowerCase() === "landing") {
+        displayName = "OASE Landing Page";
+        description =
+          "Landing page interaktif untuk platform curhat anonim Proyek OASE.";
+        homepage = "https://landing-oase2.vercel.app";
+      } else if (r.name.toLowerCase() === "portofolio-new") {
+        displayName = "Portofolio Website";
+        description =
+          "Website portofolio pribadi modern dengan Next.js, Tailwind CSS, Three.js, dan GSAP.";
+        homepage = "https://portofolio-new-beige.vercel.app";
+      }
+
       const isFeat = featuredNames.has(r.name.toLowerCase());
       return {
         id: r.id,
-        name: r.name,
-        description: r.description,
+        name: displayName,
+        description,
         html_url: r.html_url,
-        homepage: r.homepage || (isFeat ? "https://apk-absen-nine.vercel.app/" : null),
+        homepage: homepage || (isFeat ? "https://apk-absen-nine.vercel.app/" : null),
         stargazers_count: r.stargazers_count ?? 0,
         forks_count: r.forks_count ?? 0,
         language: r.language,
@@ -77,10 +97,28 @@ export async function getGithubRepos(): Promise<GitHubRepoItem[]> {
       };
     });
 
-    // If APK-ABSEN was not found in API response, ensure it's prepended
+    // Ensure Proyek OASE is always present (replaces "Porto")
+    if (
+      !mapped.some(
+        (m) =>
+          m.name.toLowerCase().includes("oase") ||
+          m.html_url.includes("oase-cerita")
+      )
+    ) {
+      mapped.push(getOaseProject());
+    }
+
+    // Ensure APK-ABSEN is always prepended as first featured project
     if (!mapped.some((m) => m.name.toLowerCase() === "apk-absen")) {
       mapped.unshift(getApkAbsenFallback());
     }
+
+    // Always ensure Proyek OASE comes right next to featured projects
+    mapped.sort((a, b) => {
+      const aRank = a.isFeatured ? 2 : a.name.includes("OASE") ? 1 : 0;
+      const bRank = b.isFeatured ? 2 : b.name.includes("OASE") ? 1 : 0;
+      return bRank - aRank;
+    });
 
     return mapped;
   } catch (error) {
@@ -89,7 +127,7 @@ export async function getGithubRepos(): Promise<GitHubRepoItem[]> {
   }
 }
 
-function getApkAbsenFallback(): GitHubRepoItem {
+export function getApkAbsenFallback(): GitHubRepoItem {
   return {
     id: 101,
     name: "APK-ABSEN",
@@ -105,19 +143,50 @@ function getApkAbsenFallback(): GitHubRepoItem {
   };
 }
 
+export function getOaseProject(): GitHubRepoItem {
+  return {
+    id: 102,
+    name: "Proyek OASE",
+    description:
+      "Platform curhat anonim berbasis digital untuk lingkungan sekolah. Siswa dapat bercerita dengan aman karena anonimitas terjamin sepenuhnya.",
+    html_url: "https://github.com/khaatzy/oase-cerita",
+    homepage: "https://proyek-oase-anvapro.vercel.app/",
+    stargazers_count: 1,
+    forks_count: 0,
+    language: "TypeScript",
+    topics: ["anonymous", "privacy", "school", "nextjs", "supabase"],
+    isFeatured: true,
+  };
+}
+
 function getFallbackRepos(): GitHubRepoItem[] {
   return [
     getApkAbsenFallback(),
+    getOaseProject(),
     {
-      id: 102,
-      name: "PORTOFOLIO-NEW",
-      description: "Website portofolio pribadi modern dengan Next.js, Tailwind CSS, Three.js, dan GSAP.",
-      html_url: `https://github.com/${profile.githubUsername}/PORTOFOLIO-NEW`,
-      homepage: null,
+      id: 103,
+      name: "OASE Landing Page",
+      description:
+        "Landing page interaktif untuk platform curhat anonim Proyek OASE.",
+      html_url: `https://github.com/${profile.githubUsername}/landing`,
+      homepage: "https://landing-oase2.vercel.app",
       stargazers_count: 0,
       forks_count: 0,
       language: "TypeScript",
-      topics: ["nextjs", "threejs", "tailwind", "gsap"],
+      topics: ["nextjs", "tailwind", "landing-page"],
+      isFeatured: false,
+    },
+    {
+      id: 104,
+      name: "Portofolio Website",
+      description:
+        "Website portofolio pribadi modern dengan Next.js, Tailwind CSS, Three.js, dan GSAP.",
+      html_url: `https://github.com/${profile.githubUsername}/PORTOFOLIO-NEW`,
+      homepage: "https://portofolio-new-beige.vercel.app",
+      stargazers_count: 0,
+      forks_count: 0,
+      language: "TypeScript",
+      topics: ["nextjs", "threejs", "tailwind"],
       isFeatured: false,
     },
   ];

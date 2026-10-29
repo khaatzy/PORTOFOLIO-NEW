@@ -51,7 +51,7 @@ export function SkillCard({ skill }: SkillCardProps) {
         </div>
 
         {/* Tech Name */}
-        <h3 className="text-base font-semibold text-snow mt-2 group-hover:text-sky transition-colors">
+        <h3 className="font-sans text-base font-semibold text-snow mt-2 group-hover:text-sky transition-colors">
           {skill.name}
         </h3>
       </div>

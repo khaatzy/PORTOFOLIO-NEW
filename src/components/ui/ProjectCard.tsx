@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { Star, GitFork, ExternalLink, ShieldCheck, QrCode } from "lucide-react";
+import { Star, GitFork, ExternalLink, ShieldCheck, QrCode, HeartHandshake } from "lucide-react";
 import { SiGithub } from "react-icons/si";
 
 export interface GitHubRepoItem {
@@ -51,6 +51,7 @@ export function ProjectCard({ repo, featured = false }: ProjectCardProps) {
   };
 
   const isAbsen = repo.name.toLowerCase().includes("absen");
+  const isOase = repo.name.toLowerCase().includes("oase");
 
   return (
     <div
@@ -94,6 +95,12 @@ export function ProjectCard({ repo, featured = false }: ProjectCardProps) {
                 <ShieldCheck className="w-3 h-3 text-sky" /> Keamanan QR
               </span>
             )}
+
+            {isOase && (
+              <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-navy/80 text-mist border border-deep">
+                <HeartHandshake className="w-3 h-3 text-sky" /> Anonim & Aman
+              </span>
+            )}
           </div>
 
           <div className="flex items-center gap-3 text-xs text-mist/80">
@@ -113,9 +120,10 @@ export function ProjectCard({ repo, featured = false }: ProjectCardProps) {
         </div>
 
         {/* Title */}
-        <h3 className="text-xl md:text-2xl font-bold tracking-tight text-snow group-hover:text-sky transition-colors flex items-center gap-2">
+        <h3 className="font-sans text-xl md:text-2xl font-bold tracking-tight text-snow group-hover:text-sky transition-colors flex items-center gap-2">
           {repo.name}
           {isAbsen && <QrCode className="w-5 h-5 text-sky/70" />}
+          {isOase && <HeartHandshake className="w-5 h-5 text-sky/70" />}
         </h3>
 
         {/* Description with Uniform Min-Height */}
