@@ -1,7 +1,6 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import Image from "next/image";
 
 const BackgroundScene = dynamic(
   () => import("@/components/three/BackgroundScene"),
@@ -9,17 +8,9 @@ const BackgroundScene = dynamic(
     ssr: false,
     loading: () => (
       <div className="fixed inset-0 -z-10 bg-ink overflow-hidden pointer-events-none select-none">
-        <div className="absolute right-0 top-0 w-full md:w-3/5 h-full opacity-20 mix-blend-luminosity">
-          <Image
-            src="/images/profile.jpg"
-            alt="Loading background"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-top"
-          />
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-r from-ink via-navy/70 to-transparent" />
+        <div className="absolute top-1/4 -right-20 w-[450px] h-[450px] bg-royal/15 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute bottom-1/3 -left-20 w-[350px] h-[350px] bg-navy/40 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-ink/30 via-transparent to-ink pointer-events-none" />
       </div>
     ),
   }

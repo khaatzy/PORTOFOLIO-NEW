@@ -38,14 +38,6 @@ export const metadata: Metadata = {
     description: profile.tagline,
     url: "https://github.com/khaatzy/PORTOFOLIO-NEW",
     siteName: `${profile.name} Portfolio`,
-    images: [
-      {
-        url: "/images/profile.jpg",
-        width: 1200,
-        height: 630,
-        alt: profile.name,
-      },
-    ],
     locale: "id_ID",
     type: "website",
   },
@@ -53,7 +45,6 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${profile.name} — Full Stack Web Developer`,
     description: profile.tagline,
-    images: ["/images/profile.jpg"],
   },
   robots: {
     index: true,

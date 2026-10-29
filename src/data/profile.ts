@@ -16,7 +16,7 @@ export const profile = {
   ],
   location: "Probolinggo, Jawa Timur, Indonesia",
   school: "SMPN 9 Probolinggo",
-  photo: "/images/profile.jpg",
+  photo: "",
   socials: {
     github: "https://github.com/khaatzy",
     linkedin: "", // opsional, sembunyikan ikon jika kosong
