@@ -1,0 +1,50 @@
+<svg width="1200" height="750" viewBox="0 0 1200 750" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="750" fill="#050A18"/>
+  <circle cx="950" cy="200" r="300" fill="#1E5EFF" fill-opacity="0.15" filter="blur(80px)"/>
+  <circle cx="250" cy="550" r="250" fill="#0A1A3F" fill-opacity="0.6" filter="blur(60px)"/>
+  
+  <!-- Subtle Grid -->
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#10275E" stroke-width="0.75" stroke-opacity="0.4"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="750" fill="url(#grid)" />
+
+  <!-- App Window Mockup -->
+  <rect x="150" y="100" width="900" height="550" rx="20" fill="#0A1A3F" fill-opacity="0.75" stroke="#1E5EFF" stroke-width="1.5"/>
+  
+  <!-- Window Header -->
+  <rect x="150" y="100" width="900" height="50" rx="20" fill="#050A18" fill-opacity="0.8"/>
+  <circle cx="185" cy="125" r="7" fill="#EF4444"/>
+  <circle cx="210" cy="125" r="7" fill="#F59E0B"/>
+  <circle cx="235" cy="125" r="7" fill="#10B981"/>
+  <rect x="350" y="115" width="500" height="22" rx="6" fill="#10275E" fill-opacity="0.6"/>
+  <text x="600" y="130" fill="#A9B8D6" font-family="system-ui, sans-serif" font-size="11" text-anchor="middle">apk-absen-nine.vercel.app</text>
+
+  <!-- App Body Content -->
+  <!-- QR Box -->
+  <rect x="220" y="210" width="220" height="220" rx="16" fill="#000000" stroke="#4DA3FF" stroke-width="2"/>
+  <!-- QR Mock graphics -->
+  <rect x="245" y="235" width="50" height="50" rx="6" fill="#1E5EFF"/>
+  <rect x="365" y="235" width="50" height="50" rx="6" fill="#1E5EFF"/>
+  <rect x="245" y="355" width="50" height="50" rx="6" fill="#1E5EFF"/>
+  <rect x="315" y="255" width="25" height="25" fill="#4DA3FF"/>
+  <rect x="325" y="315" width="45" height="45" fill="#EAF0FF"/>
+  <rect x="285" y="305" width="25" height="70" fill="#4DA3FF"/>
+  <rect x="380" y="315" width="35" height="35" fill="#1E5EFF"/>
+
+  <!-- Info panel -->
+  <text x="500" y="245" fill="#EAF0FF" font-family="system-ui, sans-serif" font-size="34" font-weight="bold">APK ABSEN</text>
+  <text x="500" y="285" fill="#4DA3FF" font-family="system-ui, sans-serif" font-size="16" font-weight="600">SISTEM PRESENSI QR DIGITAL BERKEAMANAN TINGGI</text>
+  
+  <rect x="500" y="320" width="460" height="48" rx="10" fill="#050A18" stroke="#10275E"/>
+  <text x="525" y="350" fill="#A9B8D6" font-family="system-ui, sans-serif" font-size="14">🛡️ Enkripsi Token QR Dinamis Anti-Kecurangan</text>
+
+  <rect x="500" y="385" width="460" height="48" rx="10" fill="#050A18" stroke="#10275E"/>
+  <text x="525" y="415" fill="#A9B8D6" font-family="system-ui, sans-serif" font-size="14">⚡ Sinkronisasi Database Real-Time</text>
+
+  <!-- Status Bar -->
+  <rect x="220" y="475" width="740" height="75" rx="14" fill="#10275E" fill-opacity="0.4" stroke="#1E5EFF" stroke-dasharray="4 4"/>
+  <text x="250" y="520" fill="#EAF0FF" font-family="system-ui, sans-serif" font-size="15" font-weight="500">Live Status: Terverifikasi Aktif di Lingkungan Sekolah</text>
+</svg>

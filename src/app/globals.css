@@ -1,0 +1,115 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-ink: #000000;
+  --color-night: #050A18;
+  --color-navy: #0A1A3F;
+  --color-deep: #10275E;
+  --color-royal: #1E5EFF;
+  --color-sky: #4DA3FF;
+  --color-mist: #A9B8D6;
+  --color-snow: #EAF0FF;
+}
+
+:root {
+  --bg-primary: #000000;
+  --text-primary: #EAF0FF;
+  --text-secondary: #A9B8D6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background-color: #000000;
+  color: #EAF0FF;
+  color-scheme: dark;
+}
+
+body {
+  background-color: #000000;
+  color: #EAF0FF;
+  min-height: 100vh;
+  overflow-x: hidden;
+  selection-background-color: #1E5EFF;
+  selection-color: #EAF0FF;
+}
+
+::selection {
+  background-color: #1E5EFF;
+  color: #EAF0FF;
+}
+
+/* Lenis recommended css */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050A18;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #10275E;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #1E5EFF;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 6s ease-in-out infinite;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-reverse {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
