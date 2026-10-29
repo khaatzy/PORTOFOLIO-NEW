@@ -10,7 +10,7 @@ interface TextScrambleProps {
   speed?: number;
 }
 
-const CHARS = "!<>-_\/[]{}—=+*^?#_0123456789";
+const CHARS = "0123456789ABCDEF!#$*+?@%&";
 
 export function TextScramble({
   text,
@@ -57,5 +57,9 @@ export function TextScramble({
     };
   }, [text, delay, speed, prefersReducedMotion]);
 
-  return <span className={className}>{prefersReducedMotion ? text : displayText}</span>;
+  return (
+    <span className={`inline-block tabular-nums ${className}`}>
+      {prefersReducedMotion ? text : displayText}
+    </span>
+  );
 }

@@ -10,11 +10,12 @@ interface ScrambleRotatingWordsProps {
   speed?: number;
 }
 
-const CHARS = "!<>-_\/[]{}—=+*^?#_0123456789ABCDEF";
+// Fixed-width characters to guarantee zero horizontal width jitter during scramble
+const CHARS = "0123456789ABCDEF!#$*+?@%&";
 
 export function ScrambleRotatingWords({
   words,
-  intervalMs = 3600,
+  intervalMs = 3800,
   className = "",
   speed = 28,
 }: ScrambleRotatingWordsProps) {
@@ -69,7 +70,7 @@ export function ScrambleRotatingWords({
   }, [words.length, intervalMs, prefersReducedMotion]);
 
   return (
-    <span className={`inline-block whitespace-nowrap ${className}`}>
+    <span className={`inline-block whitespace-nowrap font-mono tabular-nums tracking-wide ${className}`}>
       {prefersReducedMotion ? currentWord : displayText}
     </span>
   );

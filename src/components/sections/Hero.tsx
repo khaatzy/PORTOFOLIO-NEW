@@ -50,7 +50,7 @@ export function Hero() {
 
           {/* Main Title matching Image 1 & Font Syne */}
           <h1 className="font-heading text-4xl sm:text-6xl md:text-7xl lg:text-[5.2rem] font-extrabold tracking-tight text-snow leading-[1.04] select-none">
-            <span className="block text-mist/90 text-2xl sm:text-3xl md:text-4xl font-semibold mb-1">
+            <span className="block text-mist/90 text-2xl sm:text-3xl md:text-4xl font-semibold mb-1 min-h-[1.25em]">
               <TextScramble text="Welcome to" delay={250} speed={32} />
             </span>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-snow via-sky to-royal drop-shadow-[0_0_35px_rgba(37,99,235,0.45)]">
@@ -58,24 +58,26 @@ export function Hero() {
             </span>
           </h1>
 
-          {/* Dynamic Decrypting Roles + Separator Pipe + Permanent Name */}
-          <div className="text-base sm:text-xl md:text-2xl font-semibold mt-4 text-sky flex items-center flex-wrap gap-x-2.5 gap-y-1">
-            <ScrambleRotatingWords
-              words={[
-                "SMPN 9 Probolinggo Student",
-                "Full Stack Web Developer",
-                "3D Creative Developer",
-                "Computing Enthusiast",
-              ]}
-              className="text-sky font-semibold tracking-wide"
-            />
-            <span className="text-mist/50 font-light select-none text-base sm:text-xl">
-              |
-            </span>
-            <span className="text-snow font-bold tracking-tight text-base sm:text-xl">
-              {profile.name}
-            </span>
-            <span className="w-0.5 h-4 sm:h-5 bg-sky animate-pulse inline-block ml-0.5" />
+          {/* Dynamic Decrypting Roles + Separator Pipe + Permanent Name with Stable Locked Height */}
+          <div className="min-h-[4.5rem] sm:min-h-[4.5rem] lg:min-h-[2.5rem] flex items-center mt-3">
+            <div className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-sky flex items-center flex-wrap gap-x-2.5 gap-y-1">
+              <ScrambleRotatingWords
+                words={[
+                  "SMPN 9 Probolinggo Student",
+                  "Full Stack Web Developer",
+                  "3D Creative Developer",
+                  "Computing Enthusiast",
+                ]}
+                className="text-sky font-semibold tracking-wide"
+              />
+              <span className="text-mist/50 font-light select-none text-sm sm:text-base md:text-lg">
+                |
+              </span>
+              <span className="text-snow font-bold tracking-tight text-sm sm:text-base md:text-lg whitespace-nowrap">
+                {profile.name}
+              </span>
+              <span className="w-0.5 h-4 sm:h-5 bg-sky animate-pulse inline-block ml-0.5" />
+            </div>
           </div>
 
           {/* Bio Description matching user prompt and image tone */}
