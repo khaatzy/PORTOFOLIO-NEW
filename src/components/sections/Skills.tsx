@@ -28,9 +28,9 @@ export function Skills() {
       </div>
 
       {/* Main Grid: 2 Columns on Mobile, 4 Columns on Desktop */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 items-stretch">
         {skills.map((skill, index) => (
-          <FadeInOnScroll key={skill.name} delay={index * 0.07}>
+          <FadeInOnScroll key={skill.name} delay={index * 0.07} className="h-full">
             <SkillCard skill={skill} />
           </FadeInOnScroll>
         ))}

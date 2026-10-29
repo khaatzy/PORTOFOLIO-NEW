@@ -20,7 +20,7 @@ export const profile = {
   socials: {
     github: "https://github.com/khaatzy",
     linkedin: "", // opsional, sembunyikan ikon jika kosong
-    email: "",    // opsional, sembunyikan tombol jika kosong
+    email: "arkhanzaazs020911@gmail.com",
   },
   githubUsername: "khaatzy",
   // Repo unggulan — tampil PALING DEPAN dengan badge "⭐ Featured"

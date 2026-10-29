@@ -47,12 +47,12 @@ export function GithubProjects({ repos }: GithubProjectsProps) {
       </div>
 
       {/* Grid of Projects */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
         {repos.map((repo, idx) => (
           <FadeInOnScroll
             key={repo.id}
             delay={idx * 0.08}
-            className={repo.isFeatured ? "md:col-span-2" : ""}
+            className={repo.isFeatured ? "md:col-span-2 h-full" : "h-full"}
           >
             <ProjectCard repo={repo} featured={repo.isFeatured} />
           </FadeInOnScroll>

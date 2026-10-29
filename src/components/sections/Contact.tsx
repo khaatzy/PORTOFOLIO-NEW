@@ -12,8 +12,8 @@ export function Contact() {
   const [copied, setCopied] = useState(false);
   const currentYear = new Date().getFullYear();
 
-  // Contact email fallback if empty
-  const contactEmail = profile.socials.email || "arkhanza.work@gmail.com";
+  // Contact email
+  const contactEmail = profile.socials.email || "arkhanzaazs020911@gmail.com";
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(contactEmail);

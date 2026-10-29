@@ -34,7 +34,7 @@ export function ProjectCard({ repo, featured = false }: ProjectCardProps) {
     const y = e.clientY - rect.top;
     setMousePos({ x, y });
 
-    // Tilt calculation (-8 to 8 deg)
+    // Tilt calculation (-6 to 6 deg)
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
     const rotateX = ((y - centerY) / centerY) * -5;
@@ -58,7 +58,7 @@ export function ProjectCard({ repo, featured = false }: ProjectCardProps) {
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
-      className={`group relative rounded-2xl p-6 md:p-8 transition-transform duration-200 ease-out flex flex-col justify-between overflow-hidden bg-navy/30 backdrop-blur-md border ${
+      className={`group relative h-full w-full rounded-2xl p-6 md:p-8 transition-transform duration-200 ease-out flex flex-col justify-between overflow-hidden bg-navy/30 backdrop-blur-md border ${
         featured
           ? "md:col-span-2 border-royal/70 shadow-[0_0_35px_rgba(30,94,255,0.25)] bg-gradient-to-br from-navy/60 via-night/90 to-navy/40"
           : "border-deep/60 hover:border-royal/50 hover:shadow-[0_0_25px_rgba(30,94,255,0.15)]"
@@ -74,7 +74,8 @@ export function ProjectCard({ repo, featured = false }: ProjectCardProps) {
         />
       )}
 
-      <div>
+      {/* Top and Middle Content */}
+      <div className="flex-1 flex flex-col">
         {/* Top bar: Badge & Stats */}
         <div className="flex items-center justify-between gap-3 mb-4">
           <div className="flex items-center gap-2">
@@ -117,16 +118,16 @@ export function ProjectCard({ repo, featured = false }: ProjectCardProps) {
           {isAbsen && <QrCode className="w-5 h-5 text-sky/70" />}
         </h3>
 
-        {/* Description */}
-        <p className="text-sm text-mist leading-relaxed mt-2.5 line-clamp-3">
+        {/* Description with Uniform Min-Height */}
+        <p className="text-sm text-mist leading-relaxed mt-2.5 line-clamp-3 min-h-[3.8rem]">
           {repo.description ||
             (isAbsen
               ? "Aplikasi absensi digital berbasis QR Code dengan verifikasi berkeamanan tinggi untuk pencatatan kehadiran yang akurat dan real-time."
               : "Project open source oleh Arkhanza Akbar Zakky Siswanto.")}
         </p>
 
-        {/* Topics / Tags */}
-        <div className="flex flex-wrap gap-1.5 mt-5">
+        {/* Topics / Tags with Uniform Min-Height for Grid Alignment */}
+        <div className="flex flex-wrap items-center gap-1.5 mt-4 min-h-[1.75rem]">
           {repo.language && (
             <span className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-md bg-navy/60 border border-deep text-snow">
               <span className="w-2 h-2 rounded-full bg-royal" />
@@ -145,8 +146,8 @@ export function ProjectCard({ repo, featured = false }: ProjectCardProps) {
         </div>
       </div>
 
-      {/* Action Buttons */}
-      <div className="flex items-center gap-3 mt-8 pt-4 border-t border-deep/40">
+      {/* Action Buttons: Anchored uniformly at bottom */}
+      <div className="flex items-center gap-3 mt-6 pt-4 border-t border-deep/40">
         <a
           href={repo.html_url}
           target="_blank"
