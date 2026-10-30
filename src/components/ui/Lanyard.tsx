@@ -957,7 +957,8 @@ const Lanyard = ({
     renderer.toneMapping = THREE.NeutralToneMapping;
     renderer.toneMappingExposure = 1;
     const canvas = renderer.domElement;
-    canvas.className = 'block w-full h-full';
+    canvas.className = 'block w-full h-full touch-pan-y';
+    canvas.style.touchAction = 'pan-y';
     canvas.setAttribute('aria-hidden', 'true');
     container.appendChild(canvas);
 

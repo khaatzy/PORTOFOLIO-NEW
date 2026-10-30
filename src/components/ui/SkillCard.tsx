@@ -15,7 +15,7 @@ export function SkillCard({ skill }: SkillCardProps) {
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="group relative h-full w-full p-6 rounded-2xl bg-navy/30 hover:bg-navy/60 border border-deep/60 hover:border-royal/60 backdrop-blur-md transition-all duration-300 flex flex-col items-center justify-between text-center overflow-hidden cursor-default min-h-[230px]"
+      className="group relative h-full w-full p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-navy/30 hover:bg-navy/60 border border-deep/60 hover:border-royal/60 backdrop-blur-md transition-all duration-300 flex flex-col items-center justify-between text-center overflow-hidden cursor-default min-h-[195px] sm:min-h-[230px]"
       style={{
         boxShadow: isHovered
           ? `0 10px 35px -10px ${skill.color}40, 0 0 20px 0 ${skill.color}20`
@@ -34,15 +34,15 @@ export function SkillCard({ skill }: SkillCardProps) {
       {/* Top Section: Badge, Icon, Title */}
       <div className="flex flex-col items-center w-full">
         {/* Category badge */}
-        <span className="text-[10px] font-semibold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-navy/80 border border-deep text-mist/70 mb-3 group-hover:text-snow transition-colors">
+        <span className="text-[9px] sm:text-[10px] font-semibold tracking-wider uppercase px-2 sm:px-2.5 py-0.5 rounded-full bg-navy/80 border border-deep text-mist/70 mb-2 sm:mb-3 group-hover:text-snow transition-colors">
           {skill.category}
         </span>
 
         {/* Tech Icon */}
-        <div className="relative my-2 w-14 h-14 flex items-center justify-center">
+        <div className="relative my-1 sm:my-2 w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center">
           <Icon
             aria-hidden="true"
-            className="text-4xl md:text-5xl transition-all duration-300 group-hover:scale-110"
+            className="text-3xl sm:text-4xl md:text-5xl transition-all duration-300 group-hover:scale-110"
             style={{
               color: isHovered ? skill.color : "var(--color-mist)",
               filter: isHovered ? `drop-shadow(0 0 12px ${skill.color}80)` : "none",
@@ -51,13 +51,13 @@ export function SkillCard({ skill }: SkillCardProps) {
         </div>
 
         {/* Tech Name */}
-        <h3 className="font-sans text-base font-semibold text-snow mt-2 group-hover:text-sky transition-colors">
+        <h3 className="font-sans text-xs sm:text-base font-semibold text-snow mt-1 sm:mt-2 group-hover:text-sky transition-colors">
           {skill.name}
         </h3>
       </div>
 
       {/* Bottom Section: Short Description with Uniform Reserved Height */}
-      <p className="text-xs text-mist/80 mt-3 leading-relaxed line-clamp-2 min-h-[2rem] flex items-center justify-center">
+      <p className="text-[11px] sm:text-xs text-mist/80 mt-2 sm:mt-3 leading-relaxed line-clamp-2 min-h-[2rem] flex items-center justify-center">
         {skill.description}
       </p>
     </div>

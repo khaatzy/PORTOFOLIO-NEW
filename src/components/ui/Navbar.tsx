@@ -23,8 +23,22 @@ export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
 
+  // Lock body scroll when mobile menu is opened
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [mobileMenuOpen]);
+
   useEffect(() => {
     const handleScroll = () => {
+      if (mobileMenuOpen) return; // Keep visible while mobile menu is open
+
       const currentScrollY = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = docHeight > 0 ? (currentScrollY / docHeight) * 100 : 0;
@@ -47,12 +61,12 @@ export function Navbar() {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
+  }, [lastScrollY, mobileMenuOpen]);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     setMobileMenuOpen(false);
-    scrollTo(href, { offset: -40, duration: 1.2 });
+    scrollTo(href, { offset: -30, duration: 1.2 });
   };
 
   return (
@@ -66,20 +80,20 @@ export function Navbar() {
       </div>
 
       <header
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-400 ${
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
           isVisible ? "translate-y-0" : "-translate-y-full"
         } ${
-          isScrolled
-            ? "py-3 bg-ink/75 backdrop-blur-xl border-b border-deep/50 shadow-[0_8px_30px_rgba(0,0,0,0.8)]"
-            : "py-6 bg-transparent"
+          isScrolled || mobileMenuOpen
+            ? "py-3 bg-ink/80 backdrop-blur-xl border-b border-deep/50 shadow-[0_8px_30px_rgba(0,0,0,0.8)]"
+            : "py-4 md:py-6 bg-transparent"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 flex items-center justify-between">
           {/* Logo / Brand Name */}
           <a
             href="#hero"
             onClick={(e) => handleNavClick(e, "#hero")}
-            className="flex items-center gap-2 group cursor-pointer"
+            className="flex items-center gap-2.5 group cursor-pointer"
           >
             <div className="w-8 h-8 rounded-lg bg-navy/80 border border-deep group-hover:border-royal flex items-center justify-center transition-all duration-300 group-hover:shadow-[0_0_15px_rgba(30,94,255,0.5)]">
               <span className="text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-sky to-snow">
@@ -106,7 +120,7 @@ export function Navbar() {
             ))}
           </nav>
 
-          {/* GitHub CTA Button */}
+          {/* GitHub CTA Button (Desktop) */}
           <div className="hidden md:flex items-center gap-3">
             <a
               href={profile.socials.github}
@@ -121,42 +135,54 @@ export function Navbar() {
             </a>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Toggle Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg bg-navy/50 border border-deep text-snow hover:border-royal transition-colors"
+            className="md:hidden p-2.5 rounded-xl bg-navy/60 border border-deep text-snow hover:border-royal active:scale-95 transition-all min-w-[44px] min-h-[44px] flex items-center justify-center"
             aria-label="Toggle Navigation Menu"
+            aria-expanded={mobileMenuOpen}
           >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {mobileMenuOpen ? <X className="w-5 h-5 text-sky" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
+      </header>
 
-        {/* Mobile Fullscreen Menu */}
-        {mobileMenuOpen && (
-          <div className="fixed inset-0 top-[60px] bg-ink/95 backdrop-blur-2xl z-50 flex flex-col items-center justify-center gap-6 p-8 border-t border-deep/60 md:hidden animate-in fade-in zoom-in-95 duration-200">
-            {navItems.map((item) => (
+      {/* Mobile Fullscreen Navigation Drawer */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-30 bg-ink/95 backdrop-blur-2xl md:hidden flex flex-col justify-between pt-24 pb-8 px-6 border-b border-deep/60 animate-in fade-in zoom-in-95 duration-200 overflow-y-auto">
+          <div className="flex flex-col gap-2 my-auto">
+            <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-mist/60 mb-2 px-4">
+              Navigasi Halaman
+            </span>
+            {navItems.map((item, idx) => (
               <a
                 key={item.href}
                 href={item.href}
                 onClick={(e) => handleNavClick(e, item.href)}
-                className="text-xl font-medium text-mist hover:text-sky transition-colors py-2"
+                className="flex items-center justify-between py-3.5 px-4 rounded-xl text-lg font-semibold text-snow hover:text-sky hover:bg-navy/50 border border-transparent hover:border-deep/60 transition-all active:scale-[0.98]"
               >
-                {item.label}
+                <span>{item.label}</span>
+                <span className="text-xs font-mono text-mist/50">0{idx + 1}</span>
               </a>
             ))}
-            <div className="w-24 h-px bg-deep/60 my-2" />
+          </div>
+
+          <div className="flex flex-col gap-3 pt-6 border-t border-deep/50">
             <a
               href={profile.socials.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-royal text-snow font-medium text-sm shadow-[0_0_20px_rgba(30,94,255,0.4)]"
+              className="flex items-center justify-center gap-2 py-3 px-6 rounded-full bg-royal text-snow font-semibold text-sm shadow-[0_0_20px_rgba(30,94,255,0.4)] active:scale-95 transition-all min-h-[48px]"
             >
-              <SiGithub />
+              <SiGithub className="text-base" />
               <span>Kunjungi GitHub @{profile.githubUsername}</span>
             </a>
+            <div className="text-center text-xs text-mist/60 mt-1">
+              {profile.school} • {profile.name}
+            </div>
           </div>
-        )}
-      </header>
+        </div>
+      )}
     </>
   );
 }

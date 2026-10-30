@@ -1,8 +1,15 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Syne, Inter } from "next/font/google";
 import "./globals.css";
 import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
 import { profile } from "@/data/profile";
+
+export const viewport: Viewport = {
+  themeColor: "#020617",
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
 
 const syne = Syne({
   subsets: ["latin"],

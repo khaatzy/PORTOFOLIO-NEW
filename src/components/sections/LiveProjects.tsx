@@ -12,24 +12,24 @@ export function LiveProjects() {
   return (
     <section
       id="live-projects"
-      className="relative py-28 px-6 md:px-12 max-w-7xl mx-auto border-t border-deep/40"
+      className="relative py-20 sm:py-28 px-4 sm:px-6 md:px-12 max-w-7xl mx-auto border-t border-deep/40"
     >
-      <div className="max-w-3xl mb-16">
+      <div className="max-w-3xl mb-10 sm:mb-16">
         <span className="text-xs font-bold uppercase tracking-[0.25em] text-royal mb-3 inline-block">
           Karya Nyata & Terpublikasi
         </span>
         <SplitReveal
           tag="h2"
-          className="text-3xl sm:text-4xl md:text-5xl font-black text-snow tracking-tight"
+          className="text-2xl sm:text-4xl md:text-5xl font-black text-snow tracking-tight"
         >
           Project Live yang Sudah Dibuat
         </SplitReveal>
-        <p className="text-mist text-sm md:text-base mt-4 leading-relaxed">
+        <p className="text-mist text-xs sm:text-sm md:text-base mt-3 sm:mt-4 leading-relaxed">
           Aplikasi web siap pakai yang telah di-deploy dan dapat diakses publik. Dirancang untuk menjawab kebutuhan nyata dengan keamanan, kecepatan, dan privasi yang optimal.
         </p>
       </div>
 
-      <div className="flex flex-col gap-12 lg:gap-16">
+      <div className="flex flex-col gap-8 sm:gap-12 lg:gap-16">
         {profile.liveProjects.map((project, index) => {
           const isEven = index % 2 === 1;
           const numberStr = (index + 1).toString().padStart(2, "0");
@@ -37,16 +37,16 @@ export function LiveProjects() {
           return (
             <FadeInOnScroll key={project.title} delay={index * 0.1}>
               <div
-                className={`group relative rounded-3xl p-6 md:p-10 bg-navy/25 border border-deep/70 backdrop-blur-xl overflow-hidden hover:border-royal/60 transition-all duration-500 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center ${
+                className={`group relative rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-10 bg-navy/25 border border-deep/70 backdrop-blur-xl overflow-hidden hover:border-royal/60 transition-all duration-500 grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center ${
                   isEven ? "lg:flex-row-reverse" : ""
                 }`}
               >
                 {/* Background ambient glow */}
                 <div className="absolute -top-32 -right-32 w-80 h-80 rounded-full bg-royal/10 blur-[100px] pointer-events-none group-hover:bg-royal/20 transition-colors" />
 
-                {/* Left/Right: Screenshot Container */}
+                {/* Screenshot Container */}
                 <div
-                  className={`lg:col-span-7 relative rounded-2xl overflow-hidden border border-deep/80 bg-night aspect-[16/10] shadow-2xl ${
+                  className={`lg:col-span-7 relative rounded-xl sm:rounded-2xl overflow-hidden border border-deep/80 bg-night aspect-[16/10] shadow-2xl ${
                     isEven ? "lg:order-2" : "lg:order-1"
                   }`}
                 >
@@ -75,7 +75,7 @@ export function LiveProjects() {
                   </a>
                 </div>
 
-                {/* Left/Right: Content Details */}
+                {/* Content Details */}
                 <div
                   className={`lg:col-span-5 flex flex-col justify-between ${
                     isEven ? "lg:order-1" : "lg:order-2"
@@ -83,9 +83,9 @@ export function LiveProjects() {
                 >
                   <div>
                     {/* Outline Number & Highlight Badges */}
-                    <div className="flex items-center justify-between gap-4 mb-4">
+                    <div className="flex flex-wrap items-center justify-between gap-3 mb-3 sm:mb-4">
                       <span
-                        className="text-4xl md:text-5xl font-black font-mono tracking-tighter select-none text-transparent"
+                        className="text-3xl sm:text-4xl md:text-5xl font-black font-mono tracking-tighter select-none text-transparent"
                         style={{
                           WebkitTextStroke: "1px rgba(77, 163, 255, 0.4)",
                         }}
@@ -94,7 +94,7 @@ export function LiveProjects() {
                       </span>
 
                       {/* Highlight badges based on project */}
-                      <div className="flex items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                         {project.title.includes("Absen") ? (
                           <>
                             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-royal/15 border border-royal/40 text-sky">
@@ -122,21 +122,21 @@ export function LiveProjects() {
                     </div>
 
                     {/* Project Title */}
-                    <h3 className="text-2xl md:text-3xl font-bold tracking-tight text-snow group-hover:text-sky transition-colors">
+                    <h3 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-snow group-hover:text-sky transition-colors">
                       {project.title}
                     </h3>
 
                     {/* Project Description */}
-                    <p className="text-sm md:text-base text-mist/90 leading-relaxed mt-3">
+                    <p className="text-xs sm:text-sm md:text-base text-mist/90 leading-relaxed mt-2.5 sm:mt-3">
                       {project.description}
                     </p>
 
                     {/* Tags */}
-                    <div className="flex flex-wrap gap-2 mt-5">
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2 mt-4 sm:mt-5">
                       {project.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="text-xs px-3 py-1 rounded-md bg-night/90 border border-deep/60 text-snow/90 font-medium"
+                          className="text-[11px] sm:text-xs px-2.5 sm:px-3 py-1 rounded-md bg-night/90 border border-deep/60 text-snow/90 font-medium"
                         >
                           {tag}
                         </span>
@@ -145,12 +145,12 @@ export function LiveProjects() {
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex flex-wrap items-center gap-3.5 mt-8 pt-4 border-t border-deep/40">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3.5 mt-6 sm:mt-8 pt-4 border-t border-deep/40">
                     <a
                       href={project.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-royal hover:bg-sky text-snow text-xs font-bold transition-all shadow-[0_0_20px_rgba(30,94,255,0.4)] hover:shadow-[0_0_25px_rgba(77,163,255,0.6)] cursor-pointer"
+                      className="inline-flex items-center justify-center gap-2 px-5 py-3 sm:py-2.5 rounded-full bg-royal hover:bg-sky text-snow text-xs sm:text-sm font-bold transition-all shadow-[0_0_20px_rgba(30,94,255,0.4)] hover:shadow-[0_0_25px_rgba(77,163,255,0.6)] active:scale-[0.98] cursor-pointer min-h-[44px]"
                     >
                       <span>Kunjungi Website</span>
                       <ExternalLink className="w-3.5 h-3.5" />
@@ -161,7 +161,7 @@ export function LiveProjects() {
                         href={project.repo}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-navy/70 hover:bg-navy border border-deep hover:border-royal/60 text-snow text-xs font-semibold transition-all cursor-pointer"
+                        className="inline-flex items-center justify-center gap-2 px-5 py-3 sm:py-2.5 rounded-full bg-navy/70 hover:bg-navy border border-deep hover:border-royal/60 text-snow text-xs sm:text-sm font-semibold transition-all active:scale-[0.98] cursor-pointer min-h-[44px]"
                       >
                         <SiGithub className="text-sm" />
                         <span>Source Code</span>

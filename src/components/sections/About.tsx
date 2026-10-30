@@ -44,9 +44,9 @@ export function About() {
   return (
     <section
       id="about"
-      className="relative py-28 px-6 md:px-12 max-w-7xl mx-auto border-t border-deep/40"
+      className="relative py-20 sm:py-28 px-4 sm:px-6 md:px-12 max-w-7xl mx-auto border-t border-deep/40"
     >
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
         {/* Left Column: Heading and Highlight Cards */}
         <div className="lg:col-span-5 flex flex-col justify-between">
           <div>
@@ -55,16 +55,16 @@ export function About() {
             </span>
             <SplitReveal
               tag="h2"
-              className="text-3xl sm:text-4xl md:text-5xl font-black text-snow tracking-tight leading-tight"
+              className="text-2xl sm:text-4xl md:text-5xl font-black text-snow tracking-tight leading-tight"
             >
               Membangun Fondasi Digital Sejak Bangku Sekolah
             </SplitReveal>
 
             {/* Quick Info Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3.5 mt-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3 sm:gap-3.5 mt-6 sm:mt-8">
               <FadeInOnScroll delay={0.1}>
-                <div className="p-4 rounded-xl bg-navy/30 border border-deep/60 backdrop-blur-md flex items-center gap-3.5 hover:border-royal/50 transition-colors">
-                  <div className="w-10 h-10 rounded-lg bg-royal/15 border border-royal/30 flex items-center justify-center text-sky">
+                <div className="p-3.5 sm:p-4 rounded-xl bg-navy/30 border border-deep/60 backdrop-blur-md flex items-center gap-3.5 hover:border-royal/50 transition-colors">
+                  <div className="w-10 h-10 rounded-lg bg-royal/15 border border-royal/30 flex items-center justify-center text-sky shrink-0">
                     <GraduationCap className="w-5 h-5" />
                   </div>
                   <div>
@@ -75,8 +75,8 @@ export function About() {
               </FadeInOnScroll>
 
               <FadeInOnScroll delay={0.2}>
-                <div className="p-4 rounded-xl bg-navy/30 border border-deep/60 backdrop-blur-md flex items-center gap-3.5 hover:border-royal/50 transition-colors">
-                  <div className="w-10 h-10 rounded-lg bg-royal/15 border border-royal/30 flex items-center justify-center text-sky">
+                <div className="p-3.5 sm:p-4 rounded-xl bg-navy/30 border border-deep/60 backdrop-blur-md flex items-center gap-3.5 hover:border-royal/50 transition-colors">
+                  <div className="w-10 h-10 rounded-lg bg-royal/15 border border-royal/30 flex items-center justify-center text-sky shrink-0">
                     <MapPin className="w-5 h-5" />
                   </div>
                   <div>
@@ -87,8 +87,8 @@ export function About() {
               </FadeInOnScroll>
 
               <FadeInOnScroll delay={0.3}>
-                <div className="p-4 rounded-xl bg-navy/30 border border-deep/60 backdrop-blur-md flex items-center gap-3.5 hover:border-royal/50 transition-colors sm:col-span-2 lg:col-span-1">
-                  <div className="w-10 h-10 rounded-lg bg-royal/15 border border-royal/30 flex items-center justify-center text-sky">
+                <div className="p-3.5 sm:p-4 rounded-xl bg-navy/30 border border-deep/60 backdrop-blur-md flex items-center gap-3.5 hover:border-royal/50 transition-colors sm:col-span-2 lg:col-span-1">
+                  <div className="w-10 h-10 rounded-lg bg-royal/15 border border-royal/30 flex items-center justify-center text-sky shrink-0">
                     <Code2 className="w-5 h-5" />
                   </div>
                   <div>
@@ -101,32 +101,32 @@ export function About() {
           </div>
 
           {/* GitHub Stats Snapshot */}
-          <FadeInOnScroll delay={0.4} className="mt-8">
-            <div className="p-5 rounded-2xl bg-gradient-to-br from-navy/50 to-night/80 border border-deep/70 backdrop-blur-md">
+          <FadeInOnScroll delay={0.4} className="mt-6 sm:mt-8">
+            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-navy/50 to-night/80 border border-deep/70 backdrop-blur-md">
               <span className="text-xs uppercase tracking-wider text-mist/70 block mb-3 font-semibold">
                 Statistik GitHub @{profile.githubUsername}
               </span>
-              <div className="grid grid-cols-3 gap-3 text-center">
+              <div className="grid grid-cols-3 gap-2 sm:gap-3 text-center">
                 <div className="p-2.5 rounded-xl bg-navy/40 border border-deep/40">
                   <BookOpen className="w-4 h-4 mx-auto text-sky mb-1" />
-                  <span className="text-xl font-bold text-snow">
+                  <span className="text-lg sm:text-xl font-bold text-snow">
                     {stats ? stats.public_repos : "..."}
                   </span>
-                  <span className="text-[11px] text-mist/70 block">Repository</span>
+                  <span className="text-[10px] sm:text-[11px] text-mist/70 block">Repository</span>
                 </div>
                 <div className="p-2.5 rounded-xl bg-navy/40 border border-deep/40">
                   <Users className="w-4 h-4 mx-auto text-sky mb-1" />
-                  <span className="text-xl font-bold text-snow">
+                  <span className="text-lg sm:text-xl font-bold text-snow">
                     {stats ? stats.followers : "..."}
                   </span>
-                  <span className="text-[11px] text-mist/70 block">Followers</span>
+                  <span className="text-[10px] sm:text-[11px] text-mist/70 block">Followers</span>
                 </div>
                 <div className="p-2.5 rounded-xl bg-navy/40 border border-deep/40">
                   <GitFork className="w-4 h-4 mx-auto text-sky mb-1" />
-                  <span className="text-xl font-bold text-snow">
+                  <span className="text-lg sm:text-xl font-bold text-snow">
                     {stats ? stats.following : "..."}
                   </span>
-                  <span className="text-[11px] text-mist/70 block">Following</span>
+                  <span className="text-[10px] sm:text-[11px] text-mist/70 block">Following</span>
                 </div>
               </div>
             </div>
@@ -134,10 +134,10 @@ export function About() {
         </div>
 
         {/* Right Column: Bio Paragraphs with Fill on Scroll effect */}
-        <div className="lg:col-span-7 flex flex-col justify-center gap-8 text-base md:text-lg">
+        <div className="lg:col-span-7 flex flex-col justify-center gap-5 sm:gap-8 text-sm sm:text-base md:text-lg">
           {profile.bio.map((paragraph, idx) => (
-            <div key={idx} className="relative p-6 md:p-8 rounded-2xl bg-navy/20 border border-deep/40 backdrop-blur-sm">
-              <TextFillOnScroll className="font-normal text-mist">
+            <div key={idx} className="relative p-5 sm:p-6 md:p-8 rounded-2xl bg-navy/20 border border-deep/40 backdrop-blur-sm">
+              <TextFillOnScroll className="font-normal text-mist leading-relaxed">
                 {paragraph}
               </TextFillOnScroll>
             </div>
