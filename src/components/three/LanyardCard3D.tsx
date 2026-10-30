@@ -241,7 +241,7 @@ function createBackBadgeTexture(): THREE.CanvasTexture {
   return texture;
 }
 
-// 3. Woven Ribbon Strap Texture matching the reference image: Pure matte black with crisp white "3D CARD"
+// 3. Woven Ribbon Strap Texture: Solid matte black with crisp white "3D CARD"
 function createStrapTexture(): THREE.CanvasTexture {
   const canvas = document.createElement("canvas");
   canvas.width = 256;
@@ -249,11 +249,10 @@ function createStrapTexture(): THREE.CanvasTexture {
   const ctx = canvas.getContext("2d");
 
   if (ctx) {
-    // Pure matte deep black strap matching user's reference image
     ctx.fillStyle = "#0A0A0E";
     ctx.fillRect(0, 0, 256, 1024);
 
-    // Subtle premium herringbone/twill fabric grain
+    // Subtle herringbone fabric grain
     ctx.strokeStyle = "rgba(255, 255, 255, 0.035)";
     ctx.lineWidth = 1;
     for (let y = 0; y < 1024; y += 4) {
@@ -263,7 +262,7 @@ function createStrapTexture(): THREE.CanvasTexture {
       ctx.stroke();
     }
 
-    // Outer subtle border thread
+    // Edge stitches
     ctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
     ctx.lineWidth = 2;
     ctx.strokeRect(4, 0, 248, 1024);
@@ -274,7 +273,6 @@ function createStrapTexture(): THREE.CanvasTexture {
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
 
-    // Draw repeated text with comfortable spacing exactly like user reference images
     for (let y = 110; y < 1024; y += 220) {
       ctx.save();
       ctx.translate(128, y);
@@ -311,24 +309,18 @@ function CardScene() {
   const cardW = 2.0;
   const cardH = 2.95;
 
-  // Fixed top anchor disappearing off-screen above the header (like reference images)
-  const anchorPos = useMemo(() => new THREE.Vector3(0, 2.45, 0), []);
-  // Resting position centered vertically
-  const restPos = useMemo(() => new THREE.Vector3(0, -0.28, 0), []);
+  // Fixed top ceiling anchor point
+  const anchorPos = useMemo(() => new THREE.Vector3(0, 2.35, 0), []);
 
-  // Entrance drop-in state
-  const dropState = useRef({
-    active: true,
-    y: 1.8,
-    vy: 0.0,
-    gravity: 34.0,
-    springK: 85.0,
-    damping: 9.5,
-  });
+  // Effective pendulum length from anchor to card center of mass (hanging under gravity)
+  const hangLength = 2.60;
+  const restPos = useMemo(() => new THREE.Vector3(0, anchorPos.y - hangLength, 0), [anchorPos.y, hangLength]);
 
-  // Dynamic physics state (position, velocity, rotation)
+  // True Verlet Physics State with Gravity
   const physics = useRef({
-    pos: new THREE.Vector3(restPos.x, restPos.y + 1.8, restPos.z),
+    // Initial entrance position: dropped slightly from above to let real gravity swing it into place
+    pos: new THREE.Vector3(0.35, -0.15, 0.1),
+    prevPos: new THREE.Vector3(0.35, -0.15, 0.1),
     vel: new THREE.Vector3(0, 0, 0),
     rot: new THREE.Euler(0, 0, 0),
     targetPos: restPos.clone(),
@@ -355,9 +347,9 @@ function CardScene() {
         const worldX = ((x * viewport.width) / 2) / cardScale;
         const worldY = ((y * viewport.height) / 2) / cardScale;
 
-        // Clamp drag area so the card stays comfortably visible
-        const clampedX = Math.max(-viewport.width / 2 + 0.6, Math.min(viewport.width / 2 - 0.6, worldX - physics.current.dragOffset.x));
-        const clampedY = Math.max(-viewport.height / 2 + 0.5, Math.min(anchorPos.y - 0.45, worldY - physics.current.dragOffset.y));
+        // Clamp drag area
+        const clampedX = Math.max(-viewport.width / 2 + 0.5, Math.min(viewport.width / 2 - 0.5, worldX - physics.current.dragOffset.x));
+        const clampedY = Math.max(-viewport.height / 2 + 0.4, Math.min(anchorPos.y - 0.35, worldY - physics.current.dragOffset.y));
 
         physics.current.targetPos.set(clampedX, clampedY, 0);
       }
@@ -366,7 +358,6 @@ function CardScene() {
     const handlePointerUp = () => {
       if (physics.current.isDragging) {
         physics.current.isDragging = false;
-        physics.current.targetPos.copy(restPos);
       }
     };
 
@@ -376,14 +367,13 @@ function CardScene() {
       window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("pointerup", handlePointerUp);
     };
-  }, [anchorPos.y, cardScale, restPos, viewport.height, viewport.width]);
+  }, [anchorPos.y, cardScale, viewport.height, viewport.width]);
 
   // Pointer Down on the Card Mesh
   const handleCardPointerDown = useCallback((e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation();
     physics.current.isDragging = true;
 
-    // Calculate drag offset between pointer world pos and current card pos
     const worldX = ((e.pointer.x * viewport.width) / 2) / cardScale;
     const worldY = ((e.pointer.y * viewport.height) / 2) / cardScale;
     physics.current.dragOffset.set(
@@ -396,8 +386,8 @@ function CardScene() {
   const strapCurve = useMemo(() => {
     return new THREE.CubicBezierCurve3(
       anchorPos.clone(),
-      anchorPos.clone().add(new THREE.Vector3(0, -0.5, 0)),
-      restPos.clone().add(new THREE.Vector3(0, 0.5, 0)),
+      anchorPos.clone().add(new THREE.Vector3(0, -0.4, 0)),
+      restPos.clone().add(new THREE.Vector3(0, 0.4, 0)),
       restPos.clone()
     );
   }, [anchorPos, restPos]);
@@ -413,7 +403,6 @@ function CardScene() {
 
     for (let i = 0; i <= SEGMENTS; i++) {
       const t = i / SEGMENTS;
-      // UV coordinates: u in [0, 1], v repeats smoothly along ribbon length
       uvs[i * 4 + 0] = 0;
       uvs[i * 4 + 1] = t * 3.5;
       uvs[i * 4 + 2] = 1;
@@ -425,7 +414,6 @@ function CardScene() {
         const v2 = (i + 1) * 2;
         const v3 = (i + 1) * 2 + 1;
 
-        // Two triangles per quad segment
         indices.push(v0, v1, v2);
         indices.push(v2, v1, v3);
       }
@@ -441,9 +429,8 @@ function CardScene() {
   useFrame((state, delta) => {
     if (!cardGroupRef.current || !strapMeshRef.current) return;
 
-    const dt = Math.min(delta, 0.05); // prevent tunneling on frame lag
+    const dt = Math.min(delta, 0.033); // clamp dt to prevent physics explosions
     const p = physics.current;
-    const drop = dropState.current;
 
     if (prefersReducedMotion) {
       cardGroupRef.current.position.copy(restPos);
@@ -451,98 +438,96 @@ function CardScene() {
       return;
     }
 
-    // 1. Drop-In Entrance Animation on initial mount
-    if (drop.active) {
-      drop.vy -= drop.gravity * dt;
-      drop.y += drop.vy * dt;
+    // 1. Real 3D Gravity & Pendulum Physics Simulation (Verlet integration with substeps)
+    const substeps = 4;
+    const subDt = dt / substeps;
+    const gravity = 22.0; // Realistic downwards gravity in m/s^2
+    const airDrag = 0.995; // Gentle atmospheric drag per substep (causes natural pendulum decay)
 
-      if (drop.y <= 0) {
-        const springForce = -drop.y * drop.springK;
-        const dampingForce = -drop.vy * drop.damping;
-        drop.vy += (springForce + dampingForce) * dt;
+    for (let s = 0; s < substeps; s++) {
+      if (p.isDragging) {
+        // While user is dragging, smoothly interpolate to target
+        const dragLerp = Math.min(1, 26 * subDt);
+        const nextX = p.pos.x + (p.targetPos.x - p.pos.x) * dragLerp;
+        const nextY = p.pos.y + (p.targetPos.y - p.pos.y) * dragLerp;
+        const nextZ = p.pos.z + (0 - p.pos.z) * dragLerp;
 
-        if (Math.abs(drop.y) < 0.015 && Math.abs(drop.vy) < 0.08) {
-          drop.y = 0;
-          drop.vy = 0;
-          drop.active = false;
+        // Limit maximum stretch during drag
+        const toAnchor = new THREE.Vector3(nextX - anchorPos.x, nextY - anchorPos.y, nextZ - anchorPos.z);
+        const maxStretch = hangLength * 1.35;
+        if (toAnchor.length() > maxStretch) {
+          toAnchor.normalize().multiplyScalar(maxStretch);
+          p.pos.set(anchorPos.x + toAnchor.x, anchorPos.y + toAnchor.y, anchorPos.z + toAnchor.z);
+        } else {
+          p.pos.set(nextX, nextY, nextZ);
         }
+
+        // Maintain continuous velocity tracking for realistic momentum when released
+        p.vel.set((p.pos.x - p.prevPos.x) / subDt, (p.pos.y - p.prevPos.y) / subDt, (p.pos.z - p.prevPos.z) / subDt);
+        p.prevPos.copy(p.pos);
+      } else {
+        // REAL GRAVITY & PENDULUM MOTION:
+        // Compute Verlet velocity from previous step
+        const vx = (p.pos.x - p.prevPos.x) * airDrag;
+        const vy = (p.pos.y - p.prevPos.y) * airDrag;
+        const vz = (p.pos.z - p.prevPos.z) * airDrag;
+
+        p.prevPos.copy(p.pos);
+
+        // Constant downwards gravity force: F = m*g
+        p.pos.x += vx;
+        p.pos.y += vy - gravity * subDt * subDt;
+        p.pos.z += vz;
+
+        // Distance constraint: The card is suspended from anchorPos via lanyard of length hangLength
+        const toCard = p.pos.clone().sub(anchorPos);
+        const currentDist = toCard.length();
+
+        if (currentDist > hangLength) {
+          // Lanyard is taut: rope tension pulls the card into the spherical pendulum arc
+          const excess = currentDist - hangLength;
+          toCard.normalize();
+          p.pos.sub(toCard.clone().multiplyScalar(excess * 0.94));
+        }
+
+        p.vel.set((p.pos.x - p.prevPos.x) / subDt, (p.pos.y - p.prevPos.y) / subDt, (p.pos.z - p.prevPos.z) / subDt);
       }
-      p.pos.y = restPos.y + drop.y;
     }
 
-    // 2. Interactive Drag vs Buttery-Smooth Pendulum Return Physics
-    if (p.isDragging) {
-      const targetX = p.targetPos.x;
-      const targetY = p.targetPos.y;
-
-      // Smooth responsive follow during drag
-      const followFactor = Math.min(1, 22 * dt);
-      const newX = p.pos.x + (targetX - p.pos.x) * followFactor;
-      const newY = p.pos.y + (targetY - p.pos.y) * followFactor;
-
-      p.vel.set((newX - p.pos.x) / dt, (newY - p.pos.y) / dt, 0);
-      p.pos.x = newX;
-      p.pos.y = newY;
-
-      // Realistic 3D tilt while dragging (pitch, yaw, roll)
-      const dx = p.pos.x - anchorPos.x;
-      const dy = p.pos.y - anchorPos.y;
-      const angle = Math.atan2(dx, -dy);
-
-      const targetRotZ = -angle * 0.78 - p.vel.x * 0.035;
-      const targetRotY = -angle * 0.70 - p.vel.x * 0.045;
-      const targetRotX = p.vel.y * 0.035;
-
-      const rotLerp = Math.min(1, 15 * dt);
-      p.rot.z += (targetRotZ - p.rot.z) * rotLerp;
-      p.rot.y += (targetRotY - p.rot.y) * rotLerp;
-      p.rot.x += (targetRotX - p.rot.x) * rotLerp;
-    } else if (!drop.active) {
-      // Natural, ultra-smooth pendulum harmonic recoil upon release
-      const springK = 26.0; // gentle organic spring
-      const damping = 3.6;  // smooth decay without harsh bouncing
-
-      // Subtle ambient floating breeze when settled
+    // 2. Ambient Breeze Sway (keeps card alive and gently dangling when settled)
+    if (!p.isDragging && p.vel.length() < 0.25) {
       const t = state.clock.elapsedTime;
-      const ambientX = Math.sin(t * 1.5) * 0.035;
-      const ambientY = Math.cos(t * 1.8) * 0.02;
-
-      const desiredX = restPos.x + ambientX;
-      const desiredY = restPos.y + ambientY;
-
-      // Mouse tilt reaction when hovering
-      const mouseTiltX = pointerPos.current.y * 0.12;
-      const mouseTiltY = pointerPos.current.x * 0.16;
-
-      const fx = (desiredX - p.pos.x) * springK - p.vel.x * damping;
-      const fy = (desiredY - p.pos.y) * springK - p.vel.y * damping;
-
-      p.vel.x += fx * dt;
-      p.vel.y += fy * dt;
-
-      p.pos.x += p.vel.x * dt;
-      p.pos.y += p.vel.y * dt;
-
-      // Rotations smoothly follow the pendulum angle & momentum
-      const dx = p.pos.x - anchorPos.x;
-      const dy = p.pos.y - anchorPos.y;
-      const angle = Math.atan2(dx, -dy);
-
-      const targetRotZ = -angle * 0.82 - p.vel.x * 0.04;
-      const targetRotY = -angle * 0.72 - p.vel.x * 0.05 + mouseTiltY;
-      const targetRotX = p.vel.y * 0.04 + mouseTiltX;
-
-      const rotLerp = Math.min(1, 12 * dt);
-      p.rot.z += (targetRotZ - p.rot.z) * rotLerp;
-      p.rot.y += (targetRotY - p.rot.y) * rotLerp;
-      p.rot.x += (targetRotX - p.rot.x) * rotLerp;
+      const breezeX = Math.sin(t * 1.4) * 0.025;
+      const breezeZ = Math.cos(t * 1.2) * 0.015;
+      p.pos.x += breezeX * dt;
+      p.pos.z += breezeZ * dt;
     }
+
+    // 3. Card Orientation: Physical Hanging Alignment with Rope Tension
+    // The card hangs from its top buckle, so its spine naturally aligns with the rope vector!
+    const toAnchor = anchorPos.clone().sub(p.pos);
+    const ropeAngleZ = Math.atan2(toAnchor.x, toAnchor.y);
+    const ropeAngleX = Math.atan2(toAnchor.z, toAnchor.y);
+
+    // Mouse hover reaction
+    const mouseTiltX = pointerPos.current.y * 0.12;
+    const mouseTiltY = pointerPos.current.x * 0.16;
+
+    // Card orientation responds to pendulum angle + velocity inertia (pitch, yaw, roll)
+    const targetRotZ = -ropeAngleZ * 0.92 - p.vel.x * 0.025;
+    const targetRotY = -ropeAngleZ * 0.72 - p.vel.x * 0.035 + mouseTiltY;
+    const targetRotX = ropeAngleX * 0.85 + p.vel.y * 0.025 + mouseTiltX;
+
+    const rotSpeed = Math.min(1, 14 * dt);
+    p.rot.z += (targetRotZ - p.rot.z) * rotSpeed;
+    p.rot.y += (targetRotY - p.rot.y) * rotSpeed;
+    p.rot.x += (targetRotX - p.rot.x) * rotSpeed;
 
     // Apply 3D transform to card
     cardGroupRef.current.position.copy(p.pos);
     cardGroupRef.current.rotation.set(p.rot.x, p.rot.y, p.rot.z);
 
-    // 3. Dynamic Flexible Ribbon Strap Math (Matching user's reference images)
+    // 4. Dynamic Flexible Ribbon Strap Math (Curves in 3D under gravity & tension)
     const cardEuler = new THREE.Euler(p.rot.x, p.rot.y, p.rot.z);
     const cardUp = new THREE.Vector3(0, 1, 0).applyEuler(cardEuler);
     const cardRight = new THREE.Vector3(1, 0, 0).applyEuler(cardEuler);
@@ -550,13 +535,13 @@ function CardScene() {
     // Clasp ring center is exactly at cardH * 0.5 + 0.12
     const claspPoint = p.pos.clone().add(cardUp.clone().multiplyScalar(cardH * 0.5 + 0.12));
 
-    // Dynamic Bezier control points with natural gravity slack/sag (S-curve as in Image 1)
-    const dist = anchorPos.distanceTo(claspPoint);
-    const restLen = 1.30;
-    const slack = Math.max(0, restLen - dist);
-    const sag = slack * 0.45; // natural droop when card is pushed close to anchor
+    // Dynamic Bezier control points: When slack (distance < rest strap length), rope sags naturally under gravity!
+    const strapDist = anchorPos.distanceTo(claspPoint);
+    const strapRestLen = 1.05;
+    const slack = Math.max(0, strapRestLen - strapDist);
+    const sag = slack * 0.45; // natural droop when card is lifted/swung upward
 
-    const handleLen = Math.min(0.70, Math.max(0.25, dist * 0.38));
+    const handleLen = Math.min(0.60, Math.max(0.20, strapDist * 0.35));
     const v1 = anchorPos.clone().add(new THREE.Vector3(0, -handleLen, 0));
     const v2 = claspPoint.clone().add(cardUp.clone().multiplyScalar(handleLen)).add(new THREE.Vector3(0, -sag, 0));
 
@@ -620,7 +605,6 @@ function CardScene() {
     <group scale={cardScale}>
       {/* 1. Top Anchor Mount (Disappears upwards at top edge) */}
       <group position={[anchorPos.x, anchorPos.y, anchorPos.z]}>
-        {/* Subtle dark ceiling clip */}
         <mesh position={[0, 0.05, 0]}>
           <cylinderGeometry args={[0.02, 0.02, 0.2, 16]} />
           <meshStandardMaterial color="#0A0A0E" metalness={0.9} roughness={0.3} />
@@ -643,7 +627,7 @@ function CardScene() {
         position={[restPos.x, restPos.y, restPos.z]}
         onPointerDown={handleCardPointerDown}
       >
-        {/* Metal Swivel Buckle / Clasp at top center of card matching Image 2 */}
+        {/* Metal Swivel Buckle / Clasp at top center of card */}
         <group position={[0, cardH * 0.5 + 0.05, 0]}>
           {/* Card punch clip bracket */}
           <mesh position={[0, -0.02, 0]}>
@@ -657,7 +641,7 @@ function CardScene() {
           </mesh>
         </group>
 
-        {/* Outer White Card Bevel / Body (Polaroid / Minimalist Pass matching Image 2) */}
+        {/* Outer White Card Bevel / Body (Polaroid / Minimalist Pass) */}
         <mesh position={[0, 0, 0]}>
           <boxGeometry args={[cardW, cardH, 0.04]} />
           <meshStandardMaterial
