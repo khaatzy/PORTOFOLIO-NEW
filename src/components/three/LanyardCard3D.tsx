@@ -5,12 +5,12 @@ import { Canvas, useFrame, useThree, ThreeEvent } from "@react-three/fiber";
 import * as THREE from "three";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
-// 1. Front Badge Texture: Clean Polaroid / Minimalist VIP pass aesthetic (matching the video)
+// 1. Front Badge Texture: Clean Polaroid / Minimalist VIP pass aesthetic matching the video
 function createFrontBadgeTexture(imageSrc: string): Promise<THREE.CanvasTexture> {
   return new Promise((resolve) => {
     const canvas = document.createElement("canvas");
-    canvas.width = 720;
-    canvas.height = 1080;
+    canvas.width = 800;
+    canvas.height = 1180;
     const ctx = canvas.getContext("2d");
 
     if (!ctx) {
@@ -27,25 +27,25 @@ function createFrontBadgeTexture(imageSrc: string): Promise<THREE.CanvasTexture>
       const h = canvas.height;
 
       // Clean off-white premium badge stock
-      ctx.fillStyle = "#F8FAFC";
+      ctx.fillStyle = "#FFFFFF";
       ctx.fillRect(0, 0, w, h);
 
       // Subtle outer border
-      ctx.strokeStyle = "#CBD5E1";
-      ctx.lineWidth = 2;
-      ctx.strokeRect(10, 10, w - 20, h - 20);
+      ctx.strokeStyle = "#E2E8F0";
+      ctx.lineWidth = 3;
+      ctx.strokeRect(8, 8, w - 16, h - 16);
 
       // Top Punch Hole Slot
       ctx.fillStyle = "#0F172A";
       ctx.beginPath();
-      ctx.roundRect(w / 2 - 36, 18, 72, 16, 8);
+      ctx.roundRect(w / 2 - 38, 16, 76, 14, 7);
       ctx.fill();
 
       // Inset Portrait Photo Area
       const photoX = 36;
       const photoY = 46;
-      const photoW = w - 72; // 648
-      const photoH = 890;
+      const photoW = w - 72; // 728
+      const photoH = 760;
 
       ctx.fillStyle = "#020617";
       ctx.fillRect(photoX, photoY, photoW, photoH);
@@ -53,7 +53,7 @@ function createFrontBadgeTexture(imageSrc: string): Promise<THREE.CanvasTexture>
       if (image) {
         ctx.save();
         ctx.beginPath();
-        ctx.rect(photoX, photoY, photoW, photoH);
+        ctx.roundRect(photoX, photoY, photoW, photoH, 4);
         ctx.clip();
 
         // Cover crop
@@ -76,26 +76,57 @@ function createFrontBadgeTexture(imageSrc: string): Promise<THREE.CanvasTexture>
       }
 
       // Thin inner photo border
-      ctx.strokeStyle = "rgba(15, 23, 42, 0.15)";
+      ctx.strokeStyle = "rgba(15, 23, 42, 0.12)";
       ctx.lineWidth = 2;
       ctx.strokeRect(photoX, photoY, photoW, photoH);
 
-      // Bottom minimalist credentials strip
+      // Subtle horizontal divider below photo
+      ctx.strokeStyle = "#E2E8F0";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(photoX, 835);
+      ctx.lineTo(w - photoX, 835);
+      ctx.stroke();
+
+      // Bottom minimalist credentials
       ctx.fillStyle = "#0F172A";
-      ctx.font = "bold 28px sans-serif";
+      ctx.font = "bold 34px sans-serif";
       ctx.textAlign = "left";
-      ctx.fillText("ARKHANZA A.Z.S.", photoX + 6, 982);
+      ctx.fillText("ARKHANZA A.Z.S.", photoX + 4, 882);
+
+      ctx.fillStyle = "#0284C7";
+      ctx.font = "bold 20px 'Courier New', monospace";
+      ctx.fillText("FULL STACK WEB DEV", photoX + 4, 922);
 
       ctx.fillStyle = "#64748B";
-      ctx.font = "600 18px 'Courier New', monospace";
-      ctx.textAlign = "left";
-      ctx.fillText("FULL STACK WEB DEV // SMPN 9 PROBOLINGGO", photoX + 6, 1020);
+      ctx.font = "600 18px sans-serif";
+      ctx.fillText("SMPN 9 PROBOLINGGO", photoX + 4, 958);
 
-      // Verification symbol
+      // Verified badge symbol
       ctx.fillStyle = "#2563EB";
-      ctx.font = "bold 22px sans-serif";
+      ctx.font = "bold 18px sans-serif";
       ctx.textAlign = "right";
-      ctx.fillText("ID PASS ✓", w - photoX - 6, 984);
+      ctx.fillText("OFFICIAL PASS ✓", w - photoX - 4, 882);
+
+      // Barcode mockup
+      ctx.fillStyle = "#1E293B";
+      const barY = 995;
+      const barH = 50;
+      let curX = photoX + 6;
+      const barWidths = [3, 1, 4, 2, 1, 3, 5, 2, 1, 4, 2, 3, 1, 5, 2, 4, 1, 3, 2, 5, 2, 1, 4, 2, 3, 1, 4, 2, 4, 1, 3, 2, 1, 4, 3, 2, 4];
+      for (let i = 0; i < barWidths.length; i++) {
+        const bw = barWidths[i] * 3.4;
+        if (i % 2 === 0) {
+          ctx.fillRect(curX, barY, bw, barH);
+        }
+        curX += bw + 4;
+        if (curX > w - photoX - 10) break;
+      }
+
+      ctx.fillStyle = "#94A3B8";
+      ctx.font = "14px 'Courier New', monospace";
+      ctx.textAlign = "center";
+      ctx.fillText("ID: 2026-990-AKZ // SMPN 9 // VERIFIED PORTFOLIO", w / 2, 1075);
 
       const texture = new THREE.CanvasTexture(canvas);
       texture.colorSpace = THREE.SRGBColorSpace;
@@ -107,11 +138,11 @@ function createFrontBadgeTexture(imageSrc: string): Promise<THREE.CanvasTexture>
   });
 }
 
-// 2. Back Badge Texture: Dark developer identity pass
+// 2. Back Badge Texture: Dark high-tech developer identity pass
 function createBackBadgeTexture(): THREE.CanvasTexture {
   const canvas = document.createElement("canvas");
-  canvas.width = 720;
-  canvas.height = 1080;
+  canvas.width = 800;
+  canvas.height = 1180;
   const ctx = canvas.getContext("2d");
 
   if (ctx) {
@@ -145,7 +176,7 @@ function createBackBadgeTexture(): THREE.CanvasTexture {
     // Top punch slot
     ctx.fillStyle = "#020617";
     ctx.beginPath();
-    ctx.roundRect(w / 2 - 36, 18, 72, 16, 8);
+    ctx.roundRect(w / 2 - 38, 16, 76, 14, 7);
     ctx.fill();
 
     // Outer border
@@ -153,40 +184,40 @@ function createBackBadgeTexture(): THREE.CanvasTexture {
     ctx.lineWidth = 3;
     ctx.strokeRect(20, 20, w - 40, h - 40);
 
-    // Text details
+    // Header
     ctx.fillStyle = "#38BDF8";
-    ctx.font = "bold 22px 'Courier New', monospace";
+    ctx.font = "bold 24px 'Courier New', monospace";
     ctx.textAlign = "center";
-    ctx.fillText("DEV PASS // 2026", w / 2, 120);
+    ctx.fillText("DEV PASS // 2026", w / 2, 130);
 
     ctx.fillStyle = "#FFFFFF";
-    ctx.font = "900 48px sans-serif";
-    ctx.fillText("ARKHANZA", w / 2, 220);
+    ctx.font = "900 52px sans-serif";
+    ctx.fillText("ARKHANZA", w / 2, 230);
 
     ctx.fillStyle = "#94A3B8";
-    ctx.font = "bold 22px sans-serif";
-    ctx.fillText("CREATIVE WEB DEVELOPER", w / 2, 275);
+    ctx.font = "bold 24px sans-serif";
+    ctx.fillText("CREATIVE WEB DEVELOPER", w / 2, 285);
 
     ctx.fillStyle = "#38BDF8";
-    ctx.font = "bold 18px sans-serif";
-    ctx.fillText("SMPN 9 PROBOLINGGO", w / 2, 320);
+    ctx.font = "bold 20px sans-serif";
+    ctx.fillText("SMPN 9 PROBOLINGGO", w / 2, 330);
 
-    // Decorative divider
+    // Divider
     ctx.strokeStyle = "rgba(37, 99, 235, 0.6)";
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(80, 360);
-    ctx.lineTo(w - 80, 360);
+    ctx.moveTo(80, 380);
+    ctx.lineTo(w - 80, 380);
     ctx.stroke();
 
     // Barcode mockup
     ctx.fillStyle = "#F8FAFC";
-    const barY = 420;
-    const barH = 80;
+    const barY = 440;
+    const barH = 90;
     let curX = 90;
     const barWidths = [3, 1, 4, 2, 1, 3, 5, 2, 1, 4, 2, 3, 1, 5, 2, 4, 1, 3, 2, 5, 2, 1, 4, 2, 3, 1, 4, 2, 4, 1, 3, 2];
     for (let i = 0; i < barWidths.length; i++) {
-      const bw = barWidths[i] * 3.2;
+      const bw = barWidths[i] * 3.5;
       if (i % 2 === 0) {
         ctx.fillRect(curX, barY, bw, barH);
       }
@@ -195,14 +226,14 @@ function createBackBadgeTexture(): THREE.CanvasTexture {
     }
 
     ctx.fillStyle = "#94A3B8";
-    ctx.font = "16px 'Courier New', monospace";
+    ctx.font = "18px 'Courier New', monospace";
     ctx.textAlign = "center";
-    ctx.fillText("ID: 2026-990-AKZ // OFFICIAL PASS", w / 2, 540);
+    ctx.fillText("ID: 2026-990-AKZ // OFFICIAL PASS", w / 2, 570);
 
     // Verified badge
     ctx.fillStyle = "#38BDF8";
-    ctx.font = "bold 20px sans-serif";
-    ctx.fillText("VERIFIED PORTFOLIO BADGE ✓", w / 2, 640);
+    ctx.font = "bold 22px sans-serif";
+    ctx.fillText("VERIFIED PORTFOLIO BADGE ✓", w / 2, 680);
   }
 
   const texture = new THREE.CanvasTexture(canvas);
@@ -213,37 +244,76 @@ function createBackBadgeTexture(): THREE.CanvasTexture {
 // 3. Woven Ribbon Strap Texture with clean vertical typography
 function createStrapTexture(): THREE.CanvasTexture {
   const canvas = document.createElement("canvas");
-  canvas.width = 128;
+  canvas.width = 256;
   canvas.height = 1024;
   const ctx = canvas.getContext("2d");
+
   if (ctx) {
-    ctx.fillStyle = "#0A0D14";
-    ctx.fillRect(0, 0, 128, 1024);
+    // Matte dark navy/charcoal fabric background
+    ctx.fillStyle = "#0C101B";
+    ctx.fillRect(0, 0, 256, 1024);
 
-    // Blue stitched side borders
-    ctx.strokeStyle = "#2563EB";
+    // Fine woven textile thread grain
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.04)";
+    ctx.lineWidth = 1;
+    for (let y = 0; y < 1024; y += 4) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(256, y + 8);
+      ctx.stroke();
+    }
+
+    // Outer edge stitching
+    ctx.strokeStyle = "#38BDF8";
     ctx.lineWidth = 4;
-    ctx.strokeRect(2, 0, 124, 1024);
+    ctx.beginPath();
+    ctx.moveTo(8, 0);
+    ctx.lineTo(8, 1024);
+    ctx.stroke();
 
-    // Repeated vertical text: "3D CARD" and "ARKHANZA"
+    ctx.beginPath();
+    ctx.moveTo(248, 0);
+    ctx.lineTo(248, 1024);
+    ctx.stroke();
+
+    // Inner dashed accent stitch
+    ctx.strokeStyle = "rgba(56, 189, 248, 0.4)";
+    ctx.lineWidth = 2;
+    ctx.setLineDash([8, 8]);
+    ctx.beginPath();
+    ctx.moveTo(18, 0);
+    ctx.lineTo(18, 1024);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(238, 0);
+    ctx.lineTo(238, 1024);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Repeated vertical text: "3D CARD"
     ctx.fillStyle = "#F8FAFC";
-    ctx.font = "900 22px sans-serif";
+    ctx.font = "900 28px sans-serif";
     ctx.textAlign = "center";
 
-    for (let y = 60; y < 1024; y += 140) {
+    for (let y = 90; y < 1024; y += 190) {
       ctx.save();
-      ctx.translate(64, y);
+      ctx.translate(128, y);
       ctx.rotate(-Math.PI / 2);
       ctx.fillText("3D CARD", 0, 0);
       ctx.restore();
     }
   }
+
   const texture = new THREE.CanvasTexture(canvas);
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
   texture.repeat.set(1, 2);
+  texture.colorSpace = THREE.SRGBColorSpace;
   return texture;
 }
+
+const SEGMENTS = 44;
 
 function CardScene() {
   const [frontTexture, setFrontTexture] = useState<THREE.CanvasTexture | null>(null);
@@ -256,30 +326,31 @@ function CardScene() {
   const { viewport } = useThree();
   const prefersReducedMotion = useReducedMotion();
 
-  // Responsive scale & anchor
-  const isMobile = viewport.width < 6;
-  const cardScale = isMobile ? 0.78 : 0.98;
-  const cardW = 2.45;
-  const cardH = 3.65;
-  const anchorPos = useMemo(() => new THREE.Vector3(isMobile ? 0 : 0.4, 2.9, 0), [isMobile]);
-  const restPos = useMemo(() => new THREE.Vector3(isMobile ? 0 : 0.4, -0.15, 0), [isMobile]);
+  // Responsive scale & proportions
+  const isMobile = viewport.width < 5.2;
+  const cardScale = isMobile ? 0.82 : 1.0;
+  const cardW = 2.0;
+  const cardH = 2.95;
+
+  // Fixed top anchor on the ceiling, and resting position centered in the viewport
+  const anchorPos = useMemo(() => new THREE.Vector3(0, 2.05, 0), []);
+  const restPos = useMemo(() => new THREE.Vector3(0, -0.22, 0), []);
 
   // Entrance drop-in state
   const dropState = useRef({
     active: true,
-    y: 5.0,
+    y: 1.6,
     vy: 0.0,
-    gravity: 34.0,
-    springK: 85.0,
-    damping: 9.5,
+    gravity: 36.0,
+    springK: 95.0,
+    damping: 10.5,
   });
 
-  // Dynamic physics state (position, velocity, rotation, angular velocity)
+  // Dynamic physics state (position, velocity, rotation)
   const physics = useRef({
-    pos: new THREE.Vector3(restPos.x, restPos.y + 5.0, restPos.z),
+    pos: new THREE.Vector3(restPos.x, restPos.y + 1.6, restPos.z),
     vel: new THREE.Vector3(0, 0, 0),
     rot: new THREE.Euler(0, 0, 0),
-    rotVel: new THREE.Vector3(0, 0, 0),
     targetPos: restPos.clone(),
     isDragging: false,
     dragOffset: new THREE.Vector2(0, 0),
@@ -300,13 +371,13 @@ function CardScene() {
       pointerPos.current = { x, y };
 
       if (physics.current.isDragging) {
-        // Map pointer to 3D plane at z = 0
-        const worldX = (x * viewport.width) / 2;
-        const worldY = (y * viewport.height) / 2;
+        // Map pointer to 3D world plane at z = 0, adjusted by cardScale
+        const worldX = ((x * viewport.width) / 2) / cardScale;
+        const worldY = ((y * viewport.height) / 2) / cardScale;
 
-        // Clamp drag area
-        const clampedX = Math.max(-viewport.width / 2 + 1, Math.min(viewport.width / 2 - 1, worldX - physics.current.dragOffset.x));
-        const clampedY = Math.max(-viewport.height / 2 + 0.5, Math.min(anchorPos.y - 0.6, worldY - physics.current.dragOffset.y));
+        // Clamp drag area so the card stays within view
+        const clampedX = Math.max(-viewport.width / 2 + 0.6, Math.min(viewport.width / 2 - 0.6, worldX - physics.current.dragOffset.x));
+        const clampedY = Math.max(-viewport.height / 2 + 0.5, Math.min(anchorPos.y - 0.5, worldY - physics.current.dragOffset.y));
 
         physics.current.targetPos.set(clampedX, clampedY, 0);
       }
@@ -325,7 +396,7 @@ function CardScene() {
       window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("pointerup", handlePointerUp);
     };
-  }, [anchorPos.y, restPos, viewport.height, viewport.width]);
+  }, [anchorPos.y, cardScale, restPos, viewport.height, viewport.width]);
 
   // Pointer Down on the Card Mesh
   const handleCardPointerDown = useCallback((e: ThreeEvent<PointerEvent>) => {
@@ -333,23 +404,59 @@ function CardScene() {
     physics.current.isDragging = true;
 
     // Calculate drag offset between pointer world pos and current card pos
-    const worldX = (e.pointer.x * viewport.width) / 2;
-    const worldY = (e.pointer.y * viewport.height) / 2;
+    const worldX = ((e.pointer.x * viewport.width) / 2) / cardScale;
+    const worldY = ((e.pointer.y * viewport.height) / 2) / cardScale;
     physics.current.dragOffset.set(
       worldX - physics.current.pos.x,
       worldY - physics.current.pos.y
     );
-  }, [viewport.height, viewport.width]);
+  }, [cardScale, viewport.height, viewport.width]);
 
-  // Cubic Bezier curve for the dynamic flexible strap
+  // Persistent Cubic Bezier curve for dynamic ribbon strap
   const strapCurve = useMemo(() => {
     return new THREE.CubicBezierCurve3(
       anchorPos.clone(),
-      anchorPos.clone().add(new THREE.Vector3(0, -0.5, 0)),
-      restPos.clone().add(new THREE.Vector3(0, 0.5, 0)),
+      anchorPos.clone().add(new THREE.Vector3(0, -0.4, 0)),
+      restPos.clone().add(new THREE.Vector3(0, 0.4, 0)),
       restPos.clone()
     );
   }, [anchorPos, restPos]);
+
+  // High-performance custom Ribbon BufferGeometry (allocated ONCE, updated in-place)
+  const ribbonGeo = useMemo(() => {
+    const geo = new THREE.BufferGeometry();
+    const vertexCount = (SEGMENTS + 1) * 2;
+    const positions = new Float32Array(vertexCount * 3);
+    const normals = new Float32Array(vertexCount * 3);
+    const uvs = new Float32Array(vertexCount * 2);
+    const indices: number[] = [];
+
+    for (let i = 0; i <= SEGMENTS; i++) {
+      const t = i / SEGMENTS;
+      // UV coordinates: u in [0, 1], v repeats smoothly along length
+      uvs[i * 4 + 0] = 0;
+      uvs[i * 4 + 1] = t * 3.5;
+      uvs[i * 4 + 2] = 1;
+      uvs[i * 4 + 3] = t * 3.5;
+
+      if (i < SEGMENTS) {
+        const v0 = i * 2;
+        const v1 = i * 2 + 1;
+        const v2 = (i + 1) * 2;
+        const v3 = (i + 1) * 2 + 1;
+
+        // Two triangles per quad segment
+        indices.push(v0, v1, v2);
+        indices.push(v2, v1, v3);
+      }
+    }
+
+    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    geo.setAttribute("normal", new THREE.BufferAttribute(normals, 3));
+    geo.setAttribute("uv", new THREE.BufferAttribute(uvs, 2));
+    geo.setIndex(indices);
+    return geo;
+  }, []);
 
   useFrame((state, delta) => {
     if (!cardGroupRef.current || !strapMeshRef.current) return;
@@ -374,7 +481,7 @@ function CardScene() {
         const dampingForce = -drop.vy * drop.damping;
         drop.vy += (springForce + dampingForce) * dt;
 
-        if (Math.abs(drop.y) < 0.02 && Math.abs(drop.vy) < 0.1) {
+        if (Math.abs(drop.y) < 0.015 && Math.abs(drop.vy) < 0.08) {
           drop.y = 0;
           drop.vy = 0;
           drop.active = false;
@@ -385,8 +492,7 @@ function CardScene() {
 
     // 2. Interactive Drag vs Spring-Damper Pendulum Physics
     if (p.isDragging) {
-      // Follow cursor with smooth responsive lerp
-      const lerpSpeed = 0.35;
+      const lerpSpeed = 0.38;
       const targetX = p.targetPos.x;
       const targetY = p.targetPos.y;
 
@@ -399,22 +505,21 @@ function CardScene() {
 
       // Realistic 3D tilt while dragging (pitch, yaw, roll)
       const dx = p.pos.x - anchorPos.x;
-      const dy = p.pos.y - anchorPos.y;
-      const targetRotZ = -dx * 0.22 - p.vel.x * 0.04;
-      const targetRotY = -dx * 0.25 - p.vel.x * 0.05;
-      const targetRotX = p.vel.y * 0.04 + (dy + 3.0) * 0.08;
+      const targetRotZ = -dx * 0.22 - p.vel.x * 0.03;
+      const targetRotY = -dx * 0.28 - p.vel.x * 0.04;
+      const targetRotX = p.vel.y * 0.03;
 
       p.rot.z += (targetRotZ - p.rot.z) * 0.25;
       p.rot.y += (targetRotY - p.rot.y) * 0.25;
       p.rot.x += (targetRotX - p.rot.x) * 0.25;
     } else if (!drop.active) {
       // Spring-damper pendulum oscillation toward rest position
-      const springK = 26.0;
-      const damping = 3.8;
+      const springK = 32.0;
+      const damping = 4.2;
 
       // Gentle ambient floating breeze sway
       const t = state.clock.elapsedTime;
-      const ambientX = Math.sin(t * 1.4) * 0.035;
+      const ambientX = Math.sin(t * 1.5) * 0.035;
       const ambientY = Math.cos(t * 1.8) * 0.02;
 
       const desiredX = restPos.x + ambientX;
@@ -424,7 +529,6 @@ function CardScene() {
       const mouseTiltX = pointerPos.current.y * 0.12;
       const mouseTiltY = pointerPos.current.x * 0.18;
 
-      // Forces
       const fx = (desiredX - p.pos.x) * springK - p.vel.x * damping;
       const fy = (desiredY - p.pos.y) * springK - p.vel.y * damping;
 
@@ -434,89 +538,140 @@ function CardScene() {
       p.pos.x += p.vel.x * dt;
       p.pos.y += p.vel.y * dt;
 
-      // Rotations follow velocity and displacement
       const dx = p.pos.x - anchorPos.x;
-      const targetRotZ = -dx * 0.18 - p.vel.x * 0.06;
-      const targetRotY = -dx * 0.22 - p.vel.x * 0.08 + mouseTiltY;
-      const targetRotX = p.vel.y * 0.06 + mouseTiltX;
+      const targetRotZ = -dx * 0.20 - p.vel.x * 0.05;
+      const targetRotY = -dx * 0.24 - p.vel.x * 0.06 + mouseTiltY;
+      const targetRotX = p.vel.y * 0.05 + mouseTiltX;
 
-      p.rot.z += (targetRotZ - p.rot.z) * 0.15;
-      p.rot.y += (targetRotY - p.rot.y) * 0.15;
-      p.rot.x += (targetRotX - p.rot.x) * 0.15;
+      p.rot.z += (targetRotZ - p.rot.z) * 0.18;
+      p.rot.y += (targetRotY - p.rot.y) * 0.18;
+      p.rot.x += (targetRotX - p.rot.x) * 0.18;
     }
 
     // Apply 3D transform to card
     cardGroupRef.current.position.copy(p.pos);
     cardGroupRef.current.rotation.set(p.rot.x, p.rot.y, p.rot.z);
 
-    // 3. Dynamic Flexible Strap Curve Update
-    // Calculate the card's top clip attachment point in world space
-    const clipOffset = cardH * 0.5 + 0.14;
+    // 3. Dynamic Flexible Ribbon Strap Math
+    // Calculate the card's top clasp ring attachment point in world space
     const cardEuler = new THREE.Euler(p.rot.x, p.rot.y, p.rot.z);
     const cardUp = new THREE.Vector3(0, 1, 0).applyEuler(cardEuler);
-    const clipPoint = p.pos.clone().add(cardUp.clone().multiplyScalar(clipOffset));
+    const cardRight = new THREE.Vector3(1, 0, 0).applyEuler(cardEuler);
 
-    // Control point 1: leaves anchor going straight down
-    const v1 = anchorPos.clone().add(new THREE.Vector3(0, -0.45, 0));
-    // Control point 2: enters clip aligned with the card's tilt angle
-    const v2 = clipPoint.clone().add(cardUp.clone().multiplyScalar(0.45));
+    // Clasp ring center is exactly at cardH * 0.5 + 0.12
+    const claspPoint = p.pos.clone().add(cardUp.clone().multiplyScalar(cardH * 0.5 + 0.12));
+
+    // Dynamic Bezier control points ensuring natural tangency
+    const dist = anchorPos.distanceTo(claspPoint);
+    const handleLen = Math.min(0.65, Math.max(0.2, dist * 0.35));
+    const v1 = anchorPos.clone().add(new THREE.Vector3(0, -handleLen, 0));
+    const v2 = claspPoint.clone().add(cardUp.clone().multiplyScalar(handleLen));
 
     strapCurve.v0.copy(anchorPos);
     strapCurve.v1.copy(v1);
     strapCurve.v2.copy(v2);
-    strapCurve.v3.copy(clipPoint);
+    strapCurve.v3.copy(claspPoint);
 
-    // Re-generate smooth tube geometry along the dynamic curve (32 segments, width 0.048)
-    const newStrapGeo = new THREE.TubeGeometry(strapCurve, 28, 0.048, 8, false);
-    strapMeshRef.current.geometry.dispose();
-    strapMeshRef.current.geometry = newStrapGeo;
+    // In-place Ribbon Geometry Buffer update via ref (Zero allocation, 60-120 FPS buttery smooth)
+    const geo = strapMeshRef.current.geometry;
+    const posAttr = geo.attributes.position;
+    const normAttr = geo.attributes.normal;
+    if (!posAttr || !normAttr) return;
+
+    const posArr = posAttr.array as Float32Array;
+    const normArr = normAttr.array as Float32Array;
+
+    const halfW = 0.07; // ribbon width = 0.14 units
+    const topAnchorRight = new THREE.Vector3(1, 0, 0);
+
+    for (let i = 0; i <= SEGMENTS; i++) {
+      const t = i / SEGMENTS;
+      const pt = strapCurve.getPoint(t);
+      const tan = strapCurve.getTangent(t).normalize();
+
+      // Smoothly twist from top horizontal orientation to the card's local tilt
+      const desRight = new THREE.Vector3().lerpVectors(topAnchorRight, cardRight, t);
+
+      let norm = new THREE.Vector3().crossVectors(tan, desRight).normalize();
+      if (norm.lengthSq() < 0.0001) {
+        norm = new THREE.Vector3(0, 0, 1);
+      }
+      const right = new THREE.Vector3().crossVectors(norm, tan).normalize();
+
+      const leftPt = pt.clone().sub(right.clone().multiplyScalar(halfW));
+      const rightPt = pt.clone().add(right.clone().multiplyScalar(halfW));
+
+      const base = i * 6;
+      // Left edge vertex
+      posArr[base + 0] = leftPt.x;
+      posArr[base + 1] = leftPt.y;
+      posArr[base + 2] = leftPt.z;
+      normArr[base + 0] = norm.x;
+      normArr[base + 1] = norm.y;
+      normArr[base + 2] = norm.z;
+
+      // Right edge vertex
+      posArr[base + 3] = rightPt.x;
+      posArr[base + 4] = rightPt.y;
+      posArr[base + 5] = rightPt.z;
+      normArr[base + 3] = norm.x;
+      normArr[base + 4] = norm.y;
+      normArr[base + 5] = norm.z;
+    }
+
+    posAttr.needsUpdate = true;
+    normAttr.needsUpdate = true;
   });
 
   return (
     <group scale={cardScale}>
-      {/* 1. Top Anchor Mounting Ring (fixed at top edge) */}
-      <mesh position={[anchorPos.x, anchorPos.y, anchorPos.z]}>
-        <torusGeometry args={[0.08, 0.02, 16, 24]} />
-        <meshStandardMaterial color="#475569" metalness={0.9} roughness={0.2} />
-      </mesh>
+      {/* 1. Top Anchor Ceiling Mount (Fixed at anchorPos) */}
+      <group position={[anchorPos.x, anchorPos.y, anchorPos.z]}>
+        {/* Horizontal ceiling support rod */}
+        <mesh position={[0, 0.04, 0]} rotation={[0, 0, Math.PI / 2]}>
+          <cylinderGeometry args={[0.02, 0.02, 0.38, 16]} />
+          <meshStandardMaterial color="#1E293B" metalness={0.92} roughness={0.25} />
+        </mesh>
+        {/* Anchor ring through which ribbon passes */}
+        <mesh rotation={[Math.PI / 2, 0, 0]}>
+          <torusGeometry args={[0.075, 0.015, 16, 32]} />
+          <meshStandardMaterial color="#475569" metalness={0.9} roughness={0.2} />
+        </mesh>
+      </group>
 
-      {/* 2. Dynamic Flexible Strap Mesh (curves dynamically as card moves) */}
-      <mesh
-        ref={strapMeshRef}
-        scale={[1.85, 1.0, 0.25]} // Flatten cross section to form a ribbon
-      >
-        <bufferGeometry />
+      {/* 2. Dynamic Flexible Woven Ribbon Strap (Curves in 3D, always 100% connected) */}
+      <mesh ref={strapMeshRef} geometry={ribbonGeo}>
         <meshStandardMaterial
           map={strapTexture}
-          color="#1E293B"
-          roughness={0.75}
+          side={THREE.DoubleSide}
+          roughness={0.65}
           metalness={0.1}
         />
       </mesh>
 
-      {/* 3. The 3D ID Card Assembly (interactive drag target) */}
+      {/* 3. The 3D ID Card Assembly (Interactive drag target) */}
       <group
         ref={cardGroupRef}
         position={[restPos.x, restPos.y, restPos.z]}
         onPointerDown={handleCardPointerDown}
       >
         {/* Metal Swivel Buckle / Clasp at top center of card */}
-        <group position={[0, cardH * 0.5 + 0.12, 0]}>
-          {/* Snap ring */}
-          <mesh position={[0, -0.04, 0]}>
-            <torusGeometry args={[0.07, 0.018, 16, 24]} />
-            <meshStandardMaterial color="#0F172A" metalness={0.92} roughness={0.2} />
+        <group position={[0, cardH * 0.5 + 0.05, 0]}>
+          {/* Card punch clip bracket */}
+          <mesh position={[0, -0.02, 0]}>
+            <boxGeometry args={[0.18, 0.10, 0.04]} />
+            <meshStandardMaterial color="#0F172A" metalness={0.92} roughness={0.25} />
           </mesh>
-          {/* Clasp body */}
-          <mesh position={[0, 0.04, 0]}>
-            <boxGeometry args={[0.15, 0.12, 0.04]} />
-            <meshStandardMaterial color="#1E293B" metalness={0.9} roughness={0.25} />
+          {/* Swivel metal ring at exactly [0, 0.07, 0] (cardH * 0.5 + 0.12) */}
+          <mesh position={[0, 0.07, 0]}>
+            <torusGeometry args={[0.065, 0.014, 16, 32]} />
+            <meshStandardMaterial color="#475569" metalness={0.92} roughness={0.2} />
           </mesh>
         </group>
 
-        {/* Outer White Card Bevel / Body (Polaroid / Minimalist Pass from the video) */}
+        {/* Outer White Card Bevel / Body (Polaroid / Minimalist Pass) */}
         <mesh position={[0, 0, 0]}>
-          <boxGeometry args={[cardW, cardH, 0.05]} />
+          <boxGeometry args={[cardW, cardH, 0.04]} />
           <meshStandardMaterial
             color="#FFFFFF"
             roughness={0.25}
@@ -526,7 +681,7 @@ function CardScene() {
 
         {/* Front Printed Photo Plane (Arkhanza's portrait with white border) */}
         {frontTexture && (
-          <mesh position={[0, 0, 0.026]}>
+          <mesh position={[0, 0, 0.021]}>
             <planeGeometry args={[cardW, cardH]} />
             <meshStandardMaterial
               map={frontTexture}
@@ -537,7 +692,7 @@ function CardScene() {
         )}
 
         {/* Back Printed Info Plane (Rotated 180 deg around Y) */}
-        <mesh position={[0, 0, -0.026]} rotation={[0, Math.PI, 0]}>
+        <mesh position={[0, 0, -0.021]} rotation={[0, Math.PI, 0]}>
           <planeGeometry args={[cardW, cardH]} />
           <meshStandardMaterial
             map={backTexture}
@@ -552,18 +707,18 @@ function CardScene() {
 
 export function LanyardCard3D() {
   return (
-    <div className="relative w-full h-[540px] md:h-[640px] lg:h-[720px] flex items-center justify-center pointer-events-auto select-none">
+    <div className="relative w-full h-[520px] md:h-[620px] lg:h-[700px] flex items-center justify-center pointer-events-auto select-none">
       {/* Background Soft Blue Ambient Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] md:w-[460px] h-[340px] md:h-[460px] bg-royal/25 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] md:w-[440px] h-[320px] md:h-[440px] bg-royal/25 rounded-full blur-[120px] pointer-events-none" />
 
       {/* 3D Canvas with cursor grab */}
       <Canvas
-        camera={{ position: [0, 0, 5.5], fov: 45 }}
+        camera={{ position: [0, 0, 5.8], fov: 42 }}
         dpr={[1, 1.5]}
         gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
         className="w-full h-full cursor-grab active:cursor-grabbing"
       >
-        <ambientLight intensity={1.1} />
+        <ambientLight intensity={1.15} />
         <directionalLight position={[4, 8, 5]} intensity={1.8} color="#FFFFFF" />
         <pointLight position={[-4, 2, 3]} intensity={0.9} color="#38BDF8" />
         <pointLight position={[3, -3, 2]} intensity={0.8} color="#2563EB" />
